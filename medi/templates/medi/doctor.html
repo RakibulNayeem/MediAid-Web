@@ -1,0 +1,237 @@
+{% extends 'medi/basic.html'%}
+
+{% block css %}
+
+<style>
+  .container.search-container {
+    margin-top: 25px;
+  }
+
+  .row.search-row {
+    margin: auto;
+  }
+
+  .col-2.bg-col,
+  .col-2.zilla-col,
+  .col-2.thana-col,
+  .col-4.col-search {
+    margin: 0px 10px;
+    align-self: center;
+    text-align: center;
+    padding: 5px;
+    background-color: #ff3131;
+    color: white;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5);
+    border-radius: 5px;
+  }
+
+  .col-6.col-search {
+    padding: 3px;
+  }
+
+  .bg_titile {
+    background-color: #ff3131;
+    color: white;
+    margin: 10px 5px;
+    border-radius: 5px;
+    align-self: center;
+    text-align: center;
+  }
+  .bg_name{
+    line-height: 0.7;
+    margin-bottom: 5px;
+  }
+
+  .d-flex.form {
+    padding: 0px;
+  }
+
+  .form-control.search {
+    margin-right: 5px;
+    padding: 5px;
+  }
+
+  .btn.btn-outline-success.search-btn {
+    background-color: #ff3131;
+    color: white;
+    border-color: #ff3131;
+  }
+
+  .btn.btn-outline-success.search-btn:hover {
+    background-color: #ffffff;
+    color: #ff3131;
+  }
+
+  .row.list-row {
+    margin-top: 20px;
+
+  }
+
+  .list-col {
+    background-color: #ffffff;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5);
+    border-radius: 5px;
+  }
+
+  .col-9.donor-col {
+    padding: 5px;
+    background-color: #ffffff;
+  }
+
+  .card {
+    max-width: 100%;
+    line-height: 0.6rem;
+    margin: 5px;
+  }
+
+  .card-body {
+    padding: 0.4rem;
+  }
+
+  .pagination {
+    margin: 10px;
+  }
+
+
+  select{
+      padding: 8px;
+      width: 200px;
+      cursor: pointer;    
+  }
+  .myform{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  .myform > p{
+    margin: 15px 10px;
+
+  }
+  .myform label{
+    display: none;
+  }
+  .myform select, .myform input{
+    border: 3px solid red;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5);
+    border-radius: 5px;
+    text-align: center;
+  }
+  .myform input{
+    width: 150px;
+    background-color: red;
+    color: white;
+    font-weight: bold;
+    
+  }
+
+  #id_special {
+    color: black;
+    
+  }
+  #id_special:hover {
+    color: #ff3131;
+  }
+
+
+</style>
+
+{% endblock %}
+{% block title %}MediAid{%endblock%}
+{% block body %}
+{% load static %}
+
+<div class="container">
+
+  <form method="get" class="myform">
+    {% csrf_token %}
+    {{doctors.form.as_p}}
+    <input type="submit" value="Search" style="padding: 6px;">
+  </form>
+  
+
+  <div class="row list-row">
+    <div class="col"></div>
+    <div class="col-10 list-col">
+      <div class="row">
+        
+        <div class="col-3 city-col">
+          <div class="bg_titile">
+            <p><b>Speciality</b></p>
+          </div>
+          {% for i in speciality %}
+          <div class="bg">
+            <a href="{% url 'Doctor' %}?group={{i.id}}" id="id_special"><h6 class="bg_name">{{i.name}}</h6></a>
+            <hr>
+          </div>
+            {% endfor %}
+        </div>
+        
+        <div class="col-9 donor-col">
+          {% for i in doctors.qs %}
+          <div class="card">
+            <div class="row g-0">
+              <div class="col-md-2">
+                <img src="{%static 'medi/doctor_male.png' %}" class="img-fluid rounded-start" alt="Image">
+              </div>
+              <div class="col-md-10">
+                <div class="card-body">
+                  <h6 class="card-name"><b>{{ i.name }}</b></h6>
+                  <p class="card-bg" style="color: #ff3131;">{{ i.degree}}, {{i.speciality}}</p>
+                  <p class="card-bg">{{ i.hospital}}</p>
+                  <p class="card-contact">Active Days : {{i.active_days}}, Open : {{i.open_time}} to {{i.close_time}}</p>
+                  <p class="card-contact">Contact : {{i.contact}}</p> 
+                  <p class="card-address">Chamber Address : {{ i.chamber_address }}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          {% endfor %}
+
+          <ul class="pagination">
+            {% for i in paginator.page_range %}
+               <li class="page-item {% if i == page_number %} active {% endif %} ">
+                 <a class="page-link" href="?page={{ i }}">{{i}}</a>
+               </li>
+            {% endfor %}
+          </ul>
+        </div>
+        
+
+      </div>
+
+    </div>
+    <div class="col"></div>
+
+  </div>
+
+</div>
+
+
+  <!--chained select box-->
+  <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+
+  <script>
+    $("#zilla").change(function () {
+      var url = $("#searchForm").attr("data-area-url");  // get the url of the `load_area` view
+      var zillaId = $(this).val();  // get the selected zilla ID from the HTML input
+
+      $.ajax({                       // initialize an AJAX request
+        url: url,                    // set the url of the request (= localhost:8000/load-courses/)
+        data: {
+          'zilla': zillaId       // add the zilla id to the GET parameters
+        },
+        success: function (data) {   // `data` is the return of the `load_area` view function
+          $("#area").html(data);  // replace the contents of the area input with the data that came from the server
+        }
+      });
+
+    });
+  </script>
+
+<script>
+  document.querySelector('#id_speciality option').innerHTML = 'Speciality';
+  document.querySelector('#id_zilla option').innerHTML = 'Zilla';
+</script>
+
+{%endblock%}
+

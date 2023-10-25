@@ -1,0 +1,154 @@
+{% extends 'medi/basic.html'%}
+
+{% block title %}MediAid{%endblock%}
+{% block css%}
+<style>
+
+body {
+  font-family: Arial, Helvetica, sans-serif;
+  margin: 0;
+}
+
+html {
+  box-sizing: border-box;
+}
+
+*, *:before, *:after {
+  box-sizing: inherit;
+}
+
+.column {
+  float: left;
+  width: 33.3%;
+  margin-bottom: 16px;
+  padding: 0 8px;
+}
+
+.card {
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+  margin: 8px;
+}
+
+.about-section {
+  padding: 50px;
+  text-align: center;
+  background-color: #474e5d;
+  color: white;
+}
+
+.container {
+  padding: 0 16px;
+}
+
+.container::after, .row::after {
+  content: "";
+  clear: both;
+  display: table;
+}
+
+.title {
+  color: grey;
+}
+
+.button {
+  border: none;
+  outline: 0;
+  display: inline-block;
+  padding: 8px;
+  color: white;
+  background-color: #000;
+  text-align: center;
+  cursor: pointer;
+  width: 100%;
+}
+
+.button:hover {
+  background-color: #555;
+}
+
+@media screen and (max-width: 650px) {
+  .column {
+    width: 100%;
+    display: block;
+  }
+}
+
+.about {
+    margin-top: 40px;
+}
+
+</style>
+{% endblock %}
+
+{% block body %}
+{% load static %}
+
+<div>
+    <div class="row about">
+        <div class="col"></div>
+        <div class="col-8" >
+            <div class="about-section">
+                <h1>About Us Page</h1>
+                <hr>
+                <p><b>MediAid</b> helps you smartly when you need blood donor, information of doctors, blood banks,
+                    hospitals around you, ambulances in your emergency, blood donor organizations and health tips regularly.
+                    
+                    When you need blood donor MediAid will help you to find donor in a minute. You can search for a donor of you can upload a post for blood. Also you can contact with blood banks via our apps because you will find information of blood banks in this apps. If you need doctors information you can search in our apps and get the right information of the doctor easily.
+                    If your in emergency of an ambulance then MediAid can help you. Because you can find a ambulance near you. That's can save a life. Also it will help you to find information of blood donor organizations then you can be a donor of can collect blood.
+                    More important that you will get health tips regularly and information about donate blood. These tips will help you to lead a healthy life.
+                  <hr>
+                    <i> <br/>Enjoy Our Services</i>
+                    </p>
+               
+              </div>
+              
+              <h2 style="text-align:center; margin-top: 30px;">Our Team</h2>
+              <hr>
+              <div class="row">
+                <div class="column">
+                  <div class="card">
+                    <img src="{% static 'medi/nayeem.jpg' %}" alt="Nayeem" style="width:100%">
+                    <div class="container">
+                      <h2>Rakibul Nayeem</h2>
+                      <p class="title">CEO & Co-founder</p>
+                      <p>I am a student of department of CSE at RUET. I am a website and android apps developer. Already I developed and published my 2 apps in google play store.</p>
+                      <p>nrakibulhasan4@gmail.com</p>
+                      <p><button class="button">Contact</button></p>
+                    </div>
+                  </div>
+                </div>
+              
+                <div class="column">
+                  <div class="card">
+                    <img src="{% static 'medi/manik.JPG' %}" alt="Manik" style="width:100%">
+                    <div class="container">
+                      <h2>Hasan Manik</h2>
+                      <p class="title">CTO & Co-founder</p>
+                      <p>I am a student of department of CSE at RUET.I am a website and android apps developer. Already I developed and published my many apps in google play store. Also developed many projects and running them successfully.</p>
+                      <p>hasanmanik@gmail.com</p>
+                      <p><button class="button">Contact</button></p>
+                    </div>
+                  </div>
+                </div>
+              
+                <div class="column">
+                  <div class="card">
+                    <img src="{% static 'medi/bibek.jpg' %}" alt="John" style="width:100%; max-height: 200px;">
+                    <div class="container">
+                      <h2>Bibek Das</h2>
+                      <p class="title">COO, Designer & Co-founder</p>
+                      <p>I am a student of department of CSE at RUET.I am a website and android apps front end designer. Already I designed many apps and website and also did some group projects.</p>
+                      <p>bibekdas@gmail.com</p>
+                      <p><button class="button">Contact</button></p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+        </div> 
+
+        <div class="col"></div>
+
+    </div>
+</div>
+
+{%endblock%}

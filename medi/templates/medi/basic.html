@@ -1,0 +1,350 @@
+{% url 'home' as home %} {% url 'Doctor' as Doctor %} {% url 'Hospital' as
+Hospital %} {% url 'Ambulance' as Ambulance %} {% url 'BloodDonor' as BloodDonor
+%} {% url 'BloodBank' as BloodBank %}
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <!--Google fonts-->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Oswald:wght@200&family=Source+Sans+3:wght@200&family=Titillium+Web:wght@200&display=swap"
+      rel="stylesheet"
+    />
+
+    <!--For search box in select list-->
+    <!-- Latest compiled and minified CSS -->
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/css/bootstrap-select.min.css"
+    />
+
+    <link
+      rel="stylesheet"
+      href="https://use.fontawesome.com/releases/v5.0.8/css/all.css"
+    />
+    <!-- Bootstrap CSS -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
+      crossorigin="anonymous"
+    />
+    {% block css %} {% endblock %}
+    <style>
+      .footer-class {
+        margin-top: 2rem;
+      }
+
+      a:link {
+        text-decoration: none;
+      }
+
+      a:hover {
+        text-decoration: none;
+        color: #ff3131;
+      }
+
+      body {
+        font-family: "Roboto", sans-serif;
+      }
+
+      .logout {
+        font-size: 16px;
+        color: #fff;
+        margin-right: 20px;
+      }
+
+      #footer_item {
+        color: white;
+      }
+      #footer_item:hover {
+        color: #ff3131;
+      }
+    </style>
+
+    <title>{% block title %} {%endblock%}</title>
+  </head>
+
+  <body>
+    {% load static %}
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="/">MediAid</a>
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarSupportedContent"
+          aria-controls="navbarSupportedContent"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <li class="nav-item">
+              <a
+                class="nav-link {% if request.path == home %} active {% endif %}"
+                aria-current="page"
+                href="/"
+                >Home</a
+              >
+            </li>
+
+            <li class="nav-item">
+              <a
+                class="nav-link {% if request.path == Doctor %} active {% endif %}"
+                aria-current="page"
+                href="/doctor/"
+                >Doctor</a
+              >
+            </li>
+
+            <li class="nav-item">
+              <a
+                class="nav-link {% if request.path == BloodDonor %} active {% endif %}"
+                aria-current="page"
+                href="/blooddonor/"
+                >Blood Donor</a
+              >
+            </li>
+
+            <li class="nav-item">
+              <a
+                class="nav-link {% if request.path == BloodBank %} active {% endif %}"
+                aria-current="page"
+                href="/bloodbank/"
+                >Blood Bank</a
+              >
+            </li>
+
+            <li class="nav-item">
+              <a
+                class="nav-link {% if request.path == Hospital %} active {% endif %}"
+                aria-current="page"
+                href="/hospital/"
+                >Hospital</a
+              >
+            </li>
+
+            <li class="nav-item">
+              <a
+                class="nav-link {% if request.path == Ambulance %} active {% endif %}"
+                aria-current="page"
+                href="/ambulance/"
+                >Ambulance</a
+              >
+            </li>
+
+            <li class="nav-item dropdown">
+              <a
+                class="nav-link dropdown-toggle"
+                href="#"
+                id="navbarDropdown"
+                role="button"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
+              >
+                More
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <!-- <li><a class="dropdown-item" href="/facts/">Facts</a></li>
+                  <li><a class="dropdown-item" href="/healthtips">Health Tips</a></li> -->
+                <li>
+                  <a class="dropdown-item" href="/contact/">Contact Us</a>
+                </li>
+                <li><a class="dropdown-item" href="/about/">About Us</a></li>
+              </ul>
+            </li>
+            <!-- <li class="nav-item">
+                <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
+              </li> -->
+          </ul>
+        </div>
+      </div>
+      {% if request.user.is_authenticated %}
+      <span><a class="logout" href="{% url 'userAccount' %}">Account</a></span>
+      <span><a class="logout" href="{% url 'logout' %}">Logout</a></span>
+      {% endif %} {% if not request.user.is_authenticated %}
+      <span><a class="logout" href="{% url 'login' %}">Login</a></span>
+      {% endif %}
+    </nav>
+
+    {% block body %} {%endblock%}
+
+    <!-- Footer -->
+    <footer class="text-center text-lg-start text-white footer-class bg-dark">
+      <!-- Grid container -->
+      <div class="container p-4 pb-0">
+        <!-- Section: Links -->
+        <section class="">
+          <!--Grid row-->
+          <div class="row">
+            <!-- Grid column -->
+            <div class="col-md-3 col-lg-3 col-xl-3 mx-auto mt-3">
+              <h6 class="text-uppercase mb-4 font-weight-bold">MediAid</h6>
+              <p>
+                MediAid helps you smartly when you need blood donor, information
+                of doctors, blood banks, hospitals around you, ambulances at
+                your emergency, blood donor organizations and health tips
+                regularly.
+              </p>
+            </div>
+            <!-- Grid column -->
+
+            <hr class="w-100 clearfix d-md-none" />
+
+            <!-- Grid column -->
+            <div class="col-md-2 col-lg-2 col-xl-2 mx-auto mt-3">
+              <h6 class="text-uppercase mb-4 font-weight-bold">
+                Our Information
+              </h6>
+              <p>
+                <a class="" id="footer_item" href="{% url 'AboutUs' %}"
+                  >About Us</a
+                >
+              </p>
+              <p>
+                <a class="" id="footer_item" href="{% url 'ContactUs' %}"
+                  >Contact Us</a
+                >
+              </p>
+              <p>
+                <a class="" id="footer_item" href="{% url 'AboutUs' %}"
+                  >Download Apps</a
+                >
+              </p>
+              <p>
+                <a class="" id="footer_item" href="{% url 'AboutUs' %}"
+                  >Founder Say</a
+                >
+              </p>
+            </div>
+            <!-- Grid column -->
+
+            <hr class="w-100 clearfix d-md-none" />
+
+            <!-- Grid column -->
+            <hr class="w-100 clearfix d-md-none" />
+
+            <!-- Grid column -->
+            <div class="col-md-4 col-lg-3 col-xl-3 mx-auto mt-3">
+              <h6 class="text-uppercase mb-4 font-weight-bold">
+                Help & Support
+              </h6>
+              <p>
+                <a class="" id="footer_item" href="{% url 'Terms' %}"
+                  >Terms & Conditions</a
+                >
+              </p>
+              <p>
+                <a class="" id="footer_item" href="{% url 'Terms' %}"
+                  >Privacy Policy</a
+                >
+              </p>
+              <p>
+                <a class="" id="footer_item" href="{% url 'Terms' %}">FAQs</a>
+              </p>
+              <p>
+                <a class="" id="footer_item" href="{% url 'ContactUs' %}"
+                  >Feedback</a
+                >
+              </p>
+            </div>
+            <!-- Grid column -->
+
+            <!-- Grid column -->
+            <div class="col-md-3 col-lg-2 col-xl-2 mx-auto mt-3">
+              <h6 class="text-uppercase mb-4 font-weight-bold">Follow us</h6>
+
+              <!-- Facebook -->
+              <a
+                class="btn btn-primary btn-floating m-1"
+                style="background-color: #3b5998"
+                href="https://www.facebook.com/mediaid4u"
+                role="button"
+                ><i class="fab fa-facebook-f"></i
+              ></a>
+
+              <!-- Twitter -->
+              <a
+                class="btn btn-primary btn-floating m-1"
+                style="background-color: #55acee"
+                href="#!"
+                role="button"
+                ><i class="fab fa-twitter"></i
+              ></a>
+
+              <!-- Google -->
+              <a
+                class="btn btn-primary btn-floating m-1"
+                style="background-color: #dd4b39"
+                href="#!"
+                role="button"
+                ><i class="fab fa-google"></i
+              ></a>
+
+              <!-- Instagram -->
+              <a
+                class="btn btn-primary btn-floating m-1"
+                style="background-color: #ac2bac"
+                href="#!"
+                role="button"
+                ><i class="fab fa-instagram"></i
+              ></a>
+
+              <!-- Linkedin -->
+              <a
+                class="btn btn-primary btn-floating m-1"
+                style="background-color: #0082ca"
+                href="#!"
+                role="button"
+                ><i class="fab fa-linkedin-in"></i
+              ></a>
+              <!-- Github -->
+              <a
+                class="btn btn-primary btn-floating m-1"
+                style="background-color: #333333"
+                href="#!"
+                role="button"
+                ><i class="fab fa-github"></i
+              ></a>
+            </div>
+          </div>
+          <!--Grid row-->
+        </section>
+        <!-- Section: Links -->
+      </div>
+      <!-- Grid container -->
+
+      <!-- Copyright -->
+      <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.2)">
+        © 2021 Copyright:
+        <a class="text-white" href="#">mediaid.com</a>
+      </div>
+      <!-- Copyright -->
+    </footer>
+    <!-- Footer -->
+
+    <!-- Optional JavaScript; choose one of the two! -->
+    <!-- Option 1: Bootstrap Bundle with Popper -->
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+      crossorigin="anonymous"
+    ></script>
+
+    <!-- Option 2: Separate Popper and Bootstrap JS -->
+    <!--
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js" integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF" crossorigin="anonymous"></script>
+    -->
+  </body>
+</html>

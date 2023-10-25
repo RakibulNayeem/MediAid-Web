@@ -1,0 +1,151 @@
+{% extends 'medi/basic.html'%}
+{% load static %}
+
+
+{% block title %}MediAid{%endblock%}
+{% block css %}
+<style>
+
+    .carousel-item {
+    height: 70vh;
+    min-height: 350px;
+    background: no-repeat center center scroll;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+    
+    }
+
+    .slide-text{
+        color: black;
+    }
+    .card {
+        max-height: 250px;
+        max-width: 180px;
+        margin: 10px;
+    }
+
+    .card-img-top {
+        align-self: center;
+        max-height: 120px;
+        max-width: 120px;
+        margin: 10px;
+    }
+
+
+</style>
+
+{% endblock %}
+
+{% block body %}
+
+
+<header>
+
+    <div id="carouselExampleCaptions" class="carousel slide" data-bs-ride="carousel">
+      <div class="carousel-indicators">
+        <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+        <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="1" aria-label="Slide 2"></button>
+        <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="2" aria-label="Slide 3"></button>
+      </div>
+      <div class="carousel-inner">
+        <div class="carousel-item active" style="max-height: fit-content; background-image: url({%static 'medi/mediaid_background.png' %})">
+          <div class="carousel-caption">
+            <h5 class="slide-text"><b>MediAid</b></h5>
+            <p class="slide-text"><b>All Medical Emergency Services in One Place</b></p>
+          </div>
+        </div>
+        <div class="carousel-item" style="max-height: fit-content; background-image: url({%static 'medi/bloodPlusBacGround.png' %})">
+          <div class="carousel-caption">
+            <h5 class="slide-text"><b>Blood Donor</b></h5>
+            <p class="slide-text"><b>Find Blood Donor or Be a Blood Donor Easily!</b></p>
+          </div>
+        </div>
+        <div class="carousel-item" style=" max-height: fit-content; background-image: url({%static 'medi/Mediaid_background_image.png' %})">
+          <div class="carousel-caption">
+            <h5 class="slide-text"><b>Doctor</b></h5>
+            <p class="slide-text"><b>Find Specialist Doctors</b></p>
+          </div>
+        </div>
+      </div>
+      <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Previous</span>
+      </button>
+      <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Next</span>
+      </button>
+    </div>
+  </header>
+
+<div class="our_services">
+    <h5 style="text-align: center; margin: 15px; " ><b>Our Services</b></h5> 
+    <div class="row">
+        <div class="col"></div>
+           <div class="col-2">
+                <div class="card" style="width: 18rem;">
+                    <img src="{%static 'medi/man.png' %}" class="card-img-top" alt="Image">
+                    <div class="card-body" style="align-self: center;">
+                    <h5 class="card-title" style="text-align: center;" >Blood Donor</h5>
+                    <a href="{% url 'BloodDonor' %}" class="btn btn-primary "><b>Find More</b></a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-2">
+                <div class="card" style="width: 18rem;">
+                <img src="{%static 'medi/doctor_male.png' %}" class="card-img-top" alt="Image">
+                <div class="card-body" style="align-self: center;">
+                    <h5 class="card-title" style="text-align: center;" >Doctor</h5>
+                    <a href="{% url 'Doctor' %}" class="btn btn-primary "><b>Find More</b></a>
+                </div>
+                </div>
+            </div>
+
+
+            <div class="col-2">
+                <div class="card" style="width: 18rem;">
+                <img src="{%static 'medi/hospital.png' %}" class="card-img-top" alt="Image">
+                <div class="card-body" style="align-self: center;">
+                    <h5 class="card-title" style="text-align: center;" >Hospital</h5>
+                    <a href="{% url 'Hospital' %}" class="btn btn-primary "><b>Find More</b></a>
+                </div>
+                </div>
+            </div>
+
+            <div class="col-2">
+                <div class="card" style="width: 18rem;">
+                <img src="{%static 'medi/ambulance.png' %}" class="card-img-top" alt="Image">
+                <div class="card-body" style="align-self: center;">
+                    <h5 class="card-title" style="text-align: center;" >Ambulance</h5>
+                    <a href="{% url 'Ambulance' %}" class="btn btn-primary "><b>Find More</b></a>
+                </div>
+                </div>
+            </div>
+
+            <div class="col-2">
+                <div class="card" style="width: 18rem;">
+                <img src="{%static 'medi/blood_bank.png' %}" class="card-img-top" alt="Image">
+                <div class="card-body" style="align-self: center;">
+                    <h5 class="card-title" style="text-align: center;" >Blood Bank</h5>
+                    <a href="{% url 'BloodBank' %}" class="btn btn-primary "><b>Find More</b></a>
+                </div>
+                </div>
+            </div>
+
+        <div class="col"></div>
+
+    </div>
+
+</div>
+
+
+
+<!--JavaScript-->
+<script>
+
+</script>
+
+{%endblock%}
