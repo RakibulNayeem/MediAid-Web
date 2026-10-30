@@ -1,0 +1,5 @@
+{% extends "base.html" %}
+{% comment %}All login, sign-up and code pages use the site's layout, in a centred card.{% endcomment %}
+{% block title %}{% block head_title %}{% endblock head_title %} | MediAid{% endblock %}
+{% block before_content %}<div class="auth-card">{% if messages %}<ul class="auth-messages">{% for message in messages %}<li>{{ message }}</li>{% endfor %}</ul>{% endif %}{% endblock %}
+{% block after_content %}</div>{% endblock %}

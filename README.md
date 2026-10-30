@@ -102,6 +102,10 @@ Whenever a change includes a new migration, run `migrate` on Neon *before* the c
 
 Vercel has no permanent file storage, so the app stores no uploaded files. CSV imports are read into the database straight away. Vercel also refuses uploads above about 4.5 MB, which is why big files use the command above.
 
+## Accounts
+
+Login stays switched off on the live site until you add `EMAIL_HOST_USER` and `EMAIL_HOST_PASSWORD` (a Google "App password") in Vercel, because nobody could verify their email without them. Locally, codes are printed in the terminal.
+
 ## Change the look or the text
 
 - **Colours and styles:** `static/css/style.css`. The colour variables are at the top.

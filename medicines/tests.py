@@ -3,6 +3,7 @@ import csv
 from io import StringIO
 
 from django.contrib.auth import get_user_model
+from django.core import mail
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.core.management import call_command
 from django.db import connection
@@ -163,6 +164,72 @@ class SuggestTests(TestCase):
         self.assertContains(self.client.get("/"), 'data-suggest-url="/medicines/suggest/"')
 
 
+class LeaderboardTests(TestCase):
+    PERSON = {"user-agent": "Mozilla/5.0"}
+
+    @classmethod
+    def setUpTestData(cls):
+        cls.napa = make_medicine("Napa", brand_name_bn="নাপা")
+        cls.napa_large = make_medicine("Napa", strength="650 mg", maker="Same")
+        cls.ace = make_medicine("Ace", maker="Other")
+
+    def board(self):
+        return list(self.client.get(reverse("medicines:leaderboard")).context["most_searched"])
+
+    def test_brand_search_is_counted(self):
+        self.client.get(reverse("medicines:search"), {"q": "napa"}, headers=self.PERSON)
+        self.assertEqual(sum(Medicine.objects.filter(brand_name="Napa").values_list("search_count", flat=True)), 1)
+
+    def test_generic_only_later_pages_and_bots_are_not_counted(self):
+        for params, headers in (
+            ({"q": "paracetamol"}, self.PERSON), ({"q": "napa", "page": "2"}, self.PERSON),
+            ({"q": "napa"}, {"user-agent": "Googlebot/2.1"}), ({"q": "qqqq"}, self.PERSON),
+        ):
+            self.client.get(reverse("medicines:search"), params, headers=headers)
+        self.assertEqual(sum(Medicine.objects.values_list("search_count", flat=True)), 0)
+
+    def test_page_views_count_but_not_from_bots(self):
+        url = self.ace.get_absolute_url()
+        self.client.get(url, headers=self.PERSON)
+        self.client.get(url, headers={"user-agent": "AhrefsBot"})
+        self.ace.refresh_from_db()
+        self.assertEqual(self.ace.view_count, 1)
+
+    def test_all_strengths_of_a_brand_count_together_and_rank_first(self):
+        Medicine.objects.filter(pk=self.napa.pk).update(search_count=2)
+        Medicine.objects.filter(pk=self.napa_large.pk).update(view_count=2)
+        Medicine.objects.filter(pk=self.ace.pk).update(search_count=3)
+        self.assertEqual([(row["brand"], row["total"]) for row in self.board()], [("Napa", 4), ("Ace", 3)])
+
+    def test_empty_board_loads(self):
+        self.assertEqual(self.board(), [])
+        self.assertContains(self.client.get(reverse("medicines:leaderboard")), "এখনো যথেষ্ট")
+
+
+class AccountTests(TestCase):
+    def test_pages_load_in_the_site_layout(self):
+        for name in ("account_login", "account_signup", "account_reset_password"):
+            with self.subTest(name):
+                response = self.client.get(reverse(name))
+                self.assertContains(response, "auth-card")
+                self.assertContains(response, "mediaid-logo")
+
+    def test_header_offers_login_then_logout(self):
+        self.assertContains(self.client.get("/"), reverse("account_login"))
+        self.client.force_login(get_user_model().objects.create_user("a", "a@example.com", "x"))
+        self.assertContains(self.client.get("/"), reverse("account_logout"))
+
+    def test_signup_requires_a_verification_code(self):
+        response = self.client.post(reverse("account_signup"), {
+            "email": "new@example.com", "password1": "correct-horse-battery", "password2": "correct-horse-battery",
+        })
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(response.url, reverse("account_email_verification_sent"))
+        self.assertEqual(len(mail.outbox), 1)
+        self.assertRegex(mail.outbox[0].body, r"[A-Z0-9-]{6,}")
+        self.assertFalse(self.client.get("/").wsgi_request.user.is_authenticated)
+
+
 class AlternativesTests(TestCase):
     def setUp(self):
         self.napa = make_medicine("Napa", price="2.00", maker="A")
@@ -244,7 +311,7 @@ class PageTests(TestCase):
 
     def test_medicine_page_has_disclaimer_and_sample_notice(self):
         medicine = Medicine.objects.get(brand_name="Napa")
-        response = self.client.get(medicine.get_absolute_url())
+        response = self.client.get(medicine.get_absolute_url(), headers={"user-agent": "Mozilla/5.0"})
         self.assertContains(response, "এটি চিকিৎসা পরামর্শ নয়")
         self.assertContains(response, "নমুনা তথ্য")
         self.assertContains(response, "৳ ১.২০")

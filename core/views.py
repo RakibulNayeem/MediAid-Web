@@ -36,9 +36,9 @@ def _save_money_cards():
 def home(request):
     common = (
         # Only medicines people really opened or you picked, not the first names in the alphabet.
-        Medicine.objects.filter(Q(view_count__gt=0) | Q(is_popular=True), is_active=True)
+        Medicine.objects.filter(Q(view_count__gt=0) | Q(search_count__gt=0) | Q(is_popular=True), is_active=True)
         .select_related("generic", "dosage_form")
-        .order_by("-view_count", F("is_popular").desc(), "brand_name")[:COMMON_COUNT]
+        .order_by((F("view_count") + F("search_count")).desc(), F("is_popular").desc(), "brand_name")[:COMMON_COUNT]
     )
     real_medicines = Medicine.objects.filter(is_active=True, is_sample=False)
     return render(request, "core/home.html", {

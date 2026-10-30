@@ -27,8 +27,10 @@
         <a href="{% url 'medicines:generic_list' %}">{% translate "Generics" %}</a>
         <a href="{% url 'medicines:manufacturer_list' %}">{% translate "Manufacturers" %}</a>
         <a href="{% url 'medicines:drug_class_list' %}">{% translate "Drug classes" %}</a>
+        <a href="{% url 'medicines:leaderboard' %}">{% translate "Leaderboard" %}</a>
       </nav>
       {% block header_search %}<a class="header-search" href="{% url 'medicines:search' %}" aria-label="{% translate "Search medicines" %}"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="m16 16 4.5 4.5"/></svg></a>{% endblock %}
+      {% if accounts_enabled %}{% if user.is_authenticated %}<a class="account-link" href="{% url 'account_logout' %}">{% translate "Log out" %}</a>{% else %}<a class="account-link" href="{% url 'account_login' %}">{% translate "Log in" %}</a>{% endif %}{% endif %}
       <form class="lang-toggle" action="{% url 'set_language' %}" method="post">
         {% csrf_token %}
         <input type="hidden" name="next" value="{{ request.get_full_path }}">
@@ -43,7 +45,9 @@
 
   {% block hero %}{% endblock %}
   <main class="container">
+    {% block before_content %}{% endblock %}
     {% block content %}{% endblock %}
+    {% block after_content %}{% endblock %}
   </main>
 
   <footer class="site-footer">
@@ -57,6 +61,7 @@
         <a href="{% url 'medicines:generic_list' %}">{% translate "Generics" %}</a>
         <a href="{% url 'medicines:manufacturer_list' %}">{% translate "Manufacturers" %}</a>
         <a href="{% url 'medicines:drug_class_list' %}">{% translate "Drug classes" %}</a>
+        <a href="{% url 'medicines:leaderboard' %}">{% translate "Leaderboard" %}</a>
         <a href="{% url 'emergency:hub' %}">{% translate "Emergency" %}</a>
       </nav>
     </div>
