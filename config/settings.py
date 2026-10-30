@@ -167,6 +167,11 @@ if os.environ.get("GOOGLE_CLIENT_ID") and os.environ.get("GOOGLE_CLIENT_SECRET")
         "SCOPE": ["profile", "email"],
     }
 
+SOCIALACCOUNT_AUTO_SIGNUP = True
+# Google has already verified the address, so it logs in to the account with that same email.
+SOCIALACCOUNT_EMAIL_AUTHENTICATION = True
+SOCIALACCOUNT_EMAIL_AUTHENTICATION_AUTO_CONNECT = True
+
 # Without email nobody could verify an account, so login stays off on the live site until it's set.
 # Locally (and in tests) codes are printed in the terminal instead.
 EMAIL_HOST_USER = os.environ.get("EMAIL_HOST_USER", "")

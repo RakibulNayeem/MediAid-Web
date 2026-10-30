@@ -431,3 +431,9 @@ msgstr "খুব প্রচলিত পাসওয়ার্ড ব্য
 
 msgid "Your password can’t be entirely numeric."
 msgstr "পাসওয়ার্ড শুধু সংখ্যা দিয়ে হতে পারবে না।"
+
+msgid "or"
+msgstr "অথবা"
+
+msgid "Continue with Google"
+msgstr "Google দিয়ে চালিয়ে যান"

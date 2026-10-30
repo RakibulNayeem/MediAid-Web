@@ -226,6 +226,22 @@ class AccountTests(TestCase):
                 self.assertContains(response, "auth-card")
                 self.assertContains(response, "mediaid-logo")
 
+    GOOGLE = {"google": {"APP": {"client_id": "test-id", "secret": "test-secret"}, "SCOPE": ["profile", "email"]}}
+
+    def test_no_google_button_without_its_keys(self):
+        self.assertNotContains(self.client.get(reverse("account_login")), "google-button")
+
+    def test_google_button_appears_on_login_and_signup_and_goes_to_google(self):
+        with self.settings(SOCIALACCOUNT_PROVIDERS=self.GOOGLE):
+            for name in ("account_login", "account_signup"):
+                with self.subTest(name):
+                    self.assertContains(self.client.get(reverse(name)), "Google দিয়ে চালিয়ে যান")
+            response = self.client.post(reverse("google_login"), {"process": "login"})
+        self.assertEqual(response.status_code, 302)
+        self.assertTrue(response.url.startswith("https://accounts.google.com/"))
+        self.assertIn("client_id=test-id", response.url)
+        self.assertIn("accounts%2Fgoogle%2Flogin%2Fcallback%2F", response.url)
+
     def test_header_offers_login_then_logout(self):
         self.assertContains(self.client.get("/"), reverse("account_login"))
         self.client.force_login(get_user_model().objects.create_user("a", "a@example.com", "x"))

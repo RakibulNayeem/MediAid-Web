@@ -269,6 +269,9 @@ a, button { touch-action: manipulation; -webkit-tap-highlight-color: transparent
 .auth-card button { width: 100%; min-height: var(--tap); padding: 0 1rem; color: #fff; font: inherit; font-weight: 600; cursor: pointer; background: var(--primary); border: 0; border-radius: var(--radius-small); }
 .auth-card .errorlist { margin: .25rem 0; padding: 0; color: var(--emergency-dark); font-size: .875rem; list-style: none; }
 .auth-card .helptext, .auth-card span.helptext { display: block; margin-top: .25rem; color: var(--muted); font-size: .8rem; }
+.auth-divider { display: flex; align-items: center; gap: .75rem; margin: 1.25rem 0 1rem; color: var(--muted); font-size: .85rem; }
+.auth-divider::before, .auth-divider::after { content: ""; flex: 1; height: 1px; background: var(--hairline); }
+.auth-card .google-button { display: flex; align-items: center; justify-content: center; gap: .625rem; color: var(--text); background: var(--surface); box-shadow: inset 0 0 0 1px rgba(15, 40, 30, .25); }
 .auth-messages { margin: 0 0 1rem; padding: .625rem .875rem; background: var(--primary-light); border-radius: var(--radius-small); font-size: .875rem; list-style: none; }
 
 /* Hover only where there is a real mouse, so colours don't stick after a tap on a phone */
