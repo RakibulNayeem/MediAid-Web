@@ -37,7 +37,8 @@ h2 { font-size: 1.25rem; }
 /* Tighter letters suit large English text only: in Bangla they would break the top line joining the letters. */
 html[lang="en"] h1, html[lang="en"] h2 { letter-spacing: -.02em; }
 a { color: var(--primary); }
-.container { width: 100%; max-width: 68rem; margin: 0 auto; padding: 0 1rem; }
+/* Uses the whole screen, with a limit only on very wide monitors where lines get too long to read */
+.container { width: 100%; max-width: 120rem; margin: 0 auto; padding: 0 clamp(1rem, 3vw, 3rem); }
 .muted { color: var(--muted); font-weight: 400; }
 .small { font-size: .85rem; }
 .visually-hidden { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
@@ -312,12 +313,25 @@ a, button { touch-action: manipulation; -webkit-tap-highlight-color: transparent
 
 /* Home: medicines on the left, leaderboard on the right, once there's room for both */
 @media (min-width: 62rem) {
-  .home-layout { display: grid; grid-template-columns: minmax(0, 1fr) 20rem; align-items: start; gap: 2rem; }
+  .home-layout { display: grid; grid-template-columns: minmax(0, 1fr) 22rem; align-items: start; gap: 2.5rem; }
   .home-side { position: sticky; top: 4.5rem; }
   .home-main .save-scroll { grid-template-columns: repeat(2, 1fr); }
 }
 @media (min-width: 48rem) and (max-width: 61.99rem) {
   .home-main .save-scroll { grid-template-columns: repeat(2, 1fr); }
+}
+
+/* Wide screens: more medicines per row instead of empty space */
+@media (min-width: 80rem) {
+  .home-main .save-scroll { grid-template-columns: repeat(3, 1fr); }
+  .card-list { grid-template-columns: repeat(3, 1fr); }
+  .rank-list { grid-template-columns: 1fr; }
+  .info-grid { grid-template-columns: repeat(3, 1fr); }
+  .hero .search-form { max-width: 56rem; }
+}
+@media (min-width: 110rem) {
+  .home-main .save-scroll { grid-template-columns: repeat(4, 1fr); }
+  .card-list { grid-template-columns: repeat(4, 1fr); }
 }
 
 /* Phone accessibility settings */
