@@ -250,6 +250,17 @@ class PageTests(TestCase):
         medicine.refresh_from_db()
         self.assertEqual(medicine.view_count, 1)
 
+    def test_medicine_names_stay_as_on_the_packet_on_the_bangla_site(self):
+        medicine = Medicine.objects.get(brand_name="Napa")
+        response = self.client.get(medicine.get_absolute_url())
+        self.assertContains(response, "Napa <span class=\"muted\">500 mg</span>")
+        self.assertContains(response, "1 tablet")
+        self.assertNotContains(response, "নাপা")
+        self.assertNotContains(response, "৫০০ mg")
+        self.assertNotContains(self.client.get(medicine.generic.get_absolute_url()), "প্যারাসিটামল")
+        suggestion = self.client.get(reverse("medicines:suggest"), {"q": "নাপা"}).json()["results"][0]
+        self.assertEqual(suggestion["title"], "Napa 500 mg")
+
     def test_every_listing_page_loads(self):
         generic = Generic.objects.get(name="Paracetamol")
         maker = Manufacturer.objects.get(name="Square Pharmaceuticals")

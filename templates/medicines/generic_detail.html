@@ -5,8 +5,7 @@
 {% if generic.is_sample %}{% include "medicines/_sample_notice.html" %}{% endif %}
 
 <section class="section">
-  <h1>{{ generic|localized }}</h1>
-  {% if LANGUAGE_CODE == "bn" and generic.name_bn %}<p class="muted" lang="en">{{ generic.name }}</p>{% endif %}
+  <h1>{{ generic.name }}</h1>
   {% if generic.drug_class %}<p><a class="chip chip-green" href="{{ generic.drug_class.get_absolute_url }}">{{ generic.drug_class|localized }}</a></p>{% endif %}
 </section>
 
@@ -26,7 +25,7 @@
 {% include "medicines/_disclaimer.html" %}
 
 <section class="section">
-  <h2>{% blocktranslate with name=generic|localized %}Brands of {{ name }}{% endblocktranslate %}</h2>
+  <h2>{% blocktranslate with name=generic.name %}Brands of {{ name }}{% endblocktranslate %}</h2>
   <div class="card-list">
     {% for medicine in page %}{% include "medicines/_medicine_card.html" %}{% empty %}<p class="muted">{% translate "No brands listed yet." %}</p>{% endfor %}
   </div>

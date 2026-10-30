@@ -7,7 +7,7 @@
   <div class="card-list">
     {% for generic in page %}
     <a class="card" href="{{ generic.get_absolute_url }}">
-      <strong class="card-title">{{ generic|localized }}</strong>
+      <strong class="card-title">{{ generic.name }}</strong>
       <span class="muted small">{% blocktranslate with count=generic.brand_count|num %}{{ count }} brands{% endblocktranslate %}</span>
     </a>
     {% empty %}<p class="muted">{% translate "Nothing found." %}</p>{% endfor %}

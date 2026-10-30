@@ -11,7 +11,7 @@
     {% for generic in page %}
     <a class="card" href="{{ generic.get_absolute_url }}">
       <span class="card-main">
-        <strong class="card-title">{{ generic|localized }}</strong>
+        <strong class="card-title">{{ generic.name }}</strong>
         {% if generic.drug_class %}<span class="muted small">{{ generic.drug_class|localized }}</span>{% endif %}
       </span>
       <span class="muted small">{% blocktranslate with count=generic.brand_count|num %}{{ count }} brands{% endblocktranslate %}</span>

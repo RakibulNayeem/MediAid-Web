@@ -28,7 +28,8 @@ A Bangla-first health platform for Bangladesh: medicine information first, emerg
 - **Alternatives** are the same `generic` + `strength_key` + `dosage_form`. `strength_key` makes "500 mg" equal "500mg".
 - **Savings** only show when both brands have the same non-empty `price_unit`, so differently sized packs are never compared.
 - **Language:** Bangla unless the cookie says otherwise, ignoring the browser's language. Generic info text is in Bangla only; the English toggle translates the interface and says so on the page.
-- **Numbers:** Bangla digits are applied on the server by the `num` and `taka` filters.
+- **Names:** brand, generic and strength always show as on the packet (English), even on the Bangla site. Bangla names are only for search.
+- **Numbers:** prices and counts get Bangla digits on the server (`num`, `taka`).
 - **Import:** all or nothing. Blank cells keep stored values. Only rows that really changed are written.
 - **`is_sample`** marks test data. Pages show a warning on these rows. Sample prices are invented and the text is unverified, so sample data must not go live as if real. `seed_sample` needs `--force` when `DEBUG` is off.
 

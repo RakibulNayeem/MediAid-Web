@@ -20,13 +20,13 @@
     {% for card in save_money %}
     <a class="save-card" href="{{ card.medicine.get_absolute_url }}#alternatives">
       <span class="badge badge-save">{% blocktranslate with amount=card.saving|taka percent=card.percent|num %}Save {{ amount }} ({{ percent }}%){% endblocktranslate %}</span>
-      <strong class="card-title">{{ card.medicine|localized:"brand_name" }} <span class="muted">{{ card.medicine.strength|num }}</span></strong>
-      <span class="muted small">{{ card.medicine.generic|localized }}{% if card.medicine.is_sample %} · {% translate "Sample" %}{% endif %}</span>
+      <strong class="card-title">{{ card.medicine.brand_name }} <span class="muted">{{ card.medicine.strength }}</span></strong>
+      <span class="muted small">{{ card.medicine.generic.name }}{% if card.medicine.is_sample %} · {% translate "Sample" %}{% endif %}</span>
       <span class="save-compare">
-        <span class="save-option"><span>{{ card.medicine|localized:"brand_name" }}</span><strong>{{ card.medicine.price|taka }}</strong></span>
-        <span class="save-option save-option-best"><span>{{ card.cheapest|localized:"brand_name" }}</span><strong>{{ card.cheapest.price|taka }}</strong></span>
+        <span class="save-option"><span>{{ card.medicine.brand_name }}</span><strong>{{ card.medicine.price|taka }}</strong></span>
+        <span class="save-option save-option-best"><span>{{ card.cheapest.brand_name }}</span><strong>{{ card.cheapest.price|taka }}</strong></span>
       </span>
-      <span class="muted small">{{ card.medicine.price_unit|num }}</span>
+      <span class="muted small">{{ card.medicine.price_unit }}</span>
     </a>
     {% endfor %}
   </div>
@@ -38,7 +38,7 @@
   <h2>{% translate "Commonly searched" %}</h2>
   <div class="chip-list">
     {% for medicine in common %}
-      <a class="chip" href="{{ medicine.get_absolute_url }}">{{ medicine|localized:"brand_name" }} {{ medicine.strength|num }}</a>
+      <a class="chip" href="{{ medicine.get_absolute_url }}">{{ medicine.brand_name }} {{ medicine.strength }}</a>
     {% endfor %}
   </div>
 </section>

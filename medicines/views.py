@@ -4,7 +4,7 @@ from django.db.models import Count, F, Q
 from django.shortcuts import get_object_or_404, render
 from django.utils.translation import gettext as _
 
-from core.templatetags.mediaid import localized, num
+from core.templatetags.mediaid import localized
 
 from .models import DrugClass, Generic, Manufacturer, Medicine, saving_percent
 from .search import matching_generics, search_medicines
@@ -54,14 +54,14 @@ def suggest(request):
     results = []
     if len(query) >= 2:
         results += [
-            {"title": localized(generic), "detail": _("Generic"), "url": generic.get_absolute_url()}
+            {"title": generic.name, "detail": _("Generic"), "url": generic.get_absolute_url()}
             for generic in matching_generics(query)[:MAX_GENERIC_SUGGESTIONS]
         ]
         medicines, _was_fuzzy = search_medicines(query, allow_closest=False)
         results += [
             {
-                "title": f"{localized(medicine, 'brand_name')} {num(medicine.strength)}",
-                "detail": f"{localized(medicine.dosage_form)} · {localized(medicine.generic)} · {localized(medicine.manufacturer)}",
+                "title": f"{medicine.brand_name} {medicine.strength}",
+                "detail": f"{localized(medicine.dosage_form)} · {medicine.generic.name} · {localized(medicine.manufacturer)}",
                 "url": medicine.get_absolute_url(),
             }
             for medicine in medicines[:MAX_SUGGESTIONS - len(results)]
