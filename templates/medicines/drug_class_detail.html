@@ -1,0 +1,16 @@
+{% extends "base.html" %}{% load i18n mediaid %}
+{% block title %}{{ item.name }} | {% translate "MediAid" %}{% endblock %}
+{% block content %}
+<section class="section">
+  <h1>{{ item|localized }}</h1>
+  <div class="card-list">
+    {% for generic in page %}
+    <a class="card" href="{{ generic.get_absolute_url }}">
+      <strong class="card-title">{{ generic|localized }}</strong>
+      <span class="muted small">{% blocktranslate with count=generic.brand_count|num %}{{ count }} brands{% endblocktranslate %}</span>
+    </a>
+    {% empty %}<p class="muted">{% translate "Nothing found." %}</p>{% endfor %}
+  </div>
+  {% include "medicines/_pagination.html" %}
+</section>
+{% endblock %}

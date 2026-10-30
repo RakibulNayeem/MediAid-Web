@@ -1,0 +1,41 @@
+{% extends "base.html" %}{% load i18n mediaid %}
+{% block content %}
+<section class="hero">
+  <h1 class="visually-hidden">{% translate "Search medicines" %}</h1>
+  {% include "medicines/_search_form.html" %}
+  {% include "emergency/_strip.html" %}
+</section>
+
+{% if save_money %}
+<section class="section">
+  <h2>{% translate "Save money" %}</h2>
+  <p class="muted">{% translate "The same generic, strength and form from another company, at a lower price. Ask your doctor or pharmacist before switching." %}</p>
+  <div class="card-grid">
+    {% for card in save_money %}
+    <a class="card save-card" href="{{ card.medicine.get_absolute_url }}">
+      <span class="badge badge-save">{% blocktranslate with amount=card.saving|taka percent=card.percent|num %}Save {{ amount }} ({{ percent }}%){% endblocktranslate %}</span>
+      <strong class="card-title">{{ card.medicine|localized:"brand_name" }} <span class="muted">{{ card.medicine.strength|num }}</span></strong>
+      <span class="muted">{{ card.medicine.generic|localized }}</span>
+      <span class="compare">
+        <span>{{ card.medicine.price|taka }}</span>
+        <span aria-hidden="true">→</span>
+        <strong class="save-price">{{ card.cheapest|localized:"brand_name" }} {{ card.cheapest.price|taka }}</strong>
+      </span>
+      <span class="muted small">{{ card.medicine.price_unit|num }}{% if card.medicine.is_sample %} · {% translate "Sample" %}{% endif %}</span>
+    </a>
+    {% endfor %}
+  </div>
+</section>
+{% endif %}
+
+{% if common %}
+<section class="section">
+  <h2>{% translate "Commonly searched" %}</h2>
+  <div class="chip-list">
+    {% for medicine in common %}
+      <a class="chip" href="{{ medicine.get_absolute_url }}">{{ medicine|localized:"brand_name" }} {{ medicine.strength|num }}</a>
+    {% endfor %}
+  </div>
+</section>
+{% endif %}
+{% endblock %}

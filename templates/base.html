@@ -1,0 +1,54 @@
+{% load static i18n mediaid %}{% get_current_language as LANGUAGE_CODE %}<!doctype html>
+<html lang="{{ LANGUAGE_CODE }}">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}{% translate "MediAid - medicine information and emergency help" %}{% endblock %}</title>
+  <meta name="description" content="{% block description %}{% translate "Find medicine information, cheaper alternatives and emergency help in Bangladesh." %}{% endblock %}">
+  <meta name="theme-color" content="#064E3B">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="logo" href="{% url 'core:home' %}">{% translate "MediAid" %}</a>
+      <nav class="site-nav" aria-label="{% translate "Browse" %}">
+        <a href="{% url 'medicines:generic_list' %}">{% translate "Generics" %}</a>
+        <a href="{% url 'medicines:manufacturer_list' %}">{% translate "Manufacturers" %}</a>
+        <a href="{% url 'medicines:drug_class_list' %}">{% translate "Drug classes" %}</a>
+      </nav>
+      <form class="lang-toggle" action="{% url 'set_language' %}" method="post">
+        {% csrf_token %}
+        <input type="hidden" name="next" value="{{ request.get_full_path }}">
+        {% if LANGUAGE_CODE == "bn" %}
+          <button name="language" value="en" lang="en">English</button>
+        {% else %}
+          <button name="language" value="bn" lang="bn">বাংলা</button>
+        {% endif %}
+      </form>
+    </div>
+  </header>
+
+  <main class="container">
+    {% block content %}{% endblock %}
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <p class="footer-links">
+        <a href="{% url 'medicines:generic_list' %}">{% translate "Generics" %}</a>
+        <a href="{% url 'medicines:manufacturer_list' %}">{% translate "Manufacturers" %}</a>
+        <a href="{% url 'medicines:drug_class_list' %}">{% translate "Drug classes" %}</a>
+        <a href="{% url 'emergency:hub' %}">{% translate "Emergency" %}</a>
+      </p>
+      <p>{% translate "MediAid provides information only. It is not medical advice. Always consult a doctor or pharmacist before starting, stopping or changing a medicine." %}</p>
+      <p>{% translate "In an emergency, call 999." %}</p>
+    </div>
+  </footer>
+
+  <a class="emergency-fab" href="{% url 'emergency:hub' %}">{% translate "Emergency" %}</a>
+</body>
+</html>

@@ -1,0 +1,7 @@
+{% load i18n mediaid %}{% if page.paginator.num_pages > 1 %}
+<nav class="pagination" aria-label="{% translate "Pages" %}">
+  {% if page.has_previous %}<a class="button-secondary" href="{% page_url page.previous_page_number %}">{% translate "Previous" %}</a>{% endif %}
+  <span class="muted">{{ page.number|num }} / {{ page.paginator.num_pages|num }}</span>
+  {% if page.has_next %}<a class="button-secondary" href="{% page_url page.next_page_number %}">{% translate "Next" %}</a>{% endif %}
+</nav>
+{% endif %}

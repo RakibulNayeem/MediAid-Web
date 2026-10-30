@@ -1,0 +1,12 @@
+{% extends "base.html" %}{% load i18n mediaid %}
+{% block title %}{{ item.name }} | {% translate "MediAid" %}{% endblock %}
+{% block content %}
+<section class="section">
+  <h1>{{ item|localized }}</h1>
+  <div class="card-list">
+    {% for medicine in page %}{% include "medicines/_medicine_card.html" %}{% empty %}<p class="muted">{% translate "No brands listed yet." %}</p>{% endfor %}
+  </div>
+  {% include "medicines/_pagination.html" %}
+</section>
+{% include "medicines/_disclaimer.html" %}
+{% endblock %}

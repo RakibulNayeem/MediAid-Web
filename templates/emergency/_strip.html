@@ -1,0 +1,6 @@
+{% load i18n %}<nav class="emergency-strip" aria-label="{% translate "Emergency services" %}">
+  <a href="{% url 'emergency:section' 'blood' %}">{% translate "Find blood" %}</a>
+  <a href="{% url 'emergency:section' 'ambulance' %}">{% translate "Ambulance" %}</a>
+  <a href="{% url 'emergency:section' 'hospital' %}">{% translate "Hospital" %}</a>
+  <a href="{% url 'emergency:section' 'doctor' %}">{% translate "Doctor" %}</a>
+</nav>

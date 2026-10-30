@@ -1,0 +1,16 @@
+{% load i18n mediaid %}<a class="card medicine-card" href="{{ medicine.get_absolute_url }}">
+  <span class="card-main">
+    <strong class="card-title">{{ medicine|localized:"brand_name" }} <span class="muted">{{ medicine.strength|num }}</span></strong>
+    <span class="muted">{{ medicine.dosage_form|localized }} · {{ medicine.generic|localized }}</span>
+    <span class="muted small">{{ medicine.manufacturer|localized }}</span>
+    {% if medicine.is_sample %}<span class="badge badge-sample">{% translate "Sample" %}</span>{% endif %}
+  </span>
+  <span class="card-price">
+    {% if medicine.price is not None %}
+      <strong>{{ medicine.price|taka }}</strong>
+      {% if medicine.price_unit %}<span class="muted small">{{ medicine.price_unit|num }}</span>{% endif %}
+    {% else %}
+      <span class="muted small">{% translate "Price not available" %}</span>
+    {% endif %}
+  </span>
+</a>

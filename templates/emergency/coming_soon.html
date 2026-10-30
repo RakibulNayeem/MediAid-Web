@@ -1,0 +1,15 @@
+{% extends "base.html" %}{% load i18n %}
+{% block title %}{{ title }} | {% translate "MediAid" %}{% endblock %}
+{% block content %}
+<section class="section">
+  <h1>{{ title }}</h1>
+  <p>{% translate "This service is coming soon. If you need urgent help now, call:" %}</p>
+  <div class="call-list">
+    <a class="call-button" href="tel:999">{% translate "999 - National emergency" %}</a>
+    <a class="call-button call-button-green" href="tel:16263">{% translate "16263 - Health helpline" %}</a>
+  </div>
+</section>
+<section class="section">
+  {% include "emergency/_strip.html" %}
+</section>
+{% endblock %}
