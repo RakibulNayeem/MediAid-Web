@@ -15,6 +15,7 @@ A Bangla-first health platform for Bangladesh: medicine information first, emerg
 - `core/`: home page, `BanglaFirstLocaleMiddleware`, template filters (`num`, `taka`, `localized`, `lines`), `compile_po`.
 - `medicines/`: models, `search.py`, `importer.py`, `text.py`, views, admin, and the `import_csv` and `seed_sample` commands.
 - `emergency/`: phase 2 placeholders only, with no models yet.
+- `static/img/brand/`: logos and icons copied from `MediAid-Logo-Kit/` (kept out of git). Header: Bangla or English on-dark logo by language. Footer: bilingual on-dark. Follow the rules in the kit README.
 - `templates/`, `static/css/style.css` (the only CSS file; colours are variables at the top), `locale/bn/`.
 
 ## Key decisions

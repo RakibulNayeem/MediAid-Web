@@ -228,6 +228,14 @@ class PageTests(TestCase):
         self.assertContains(response, "টাকা বাঁচান")
         self.assertContains(response, "emergency-fab")
 
+    def test_logo_follows_the_language(self):
+        home = self.client.get("/")
+        self.assertContains(home, "mediaid-logo-bn-on-dark")
+        self.assertContains(home, "mediaid-logo-bilingual-on-dark")
+        self.assertContains(home, "favicon.ico")
+        english = self.client.post(reverse("set_language"), {"language": "en", "next": "/"}, follow=True)
+        self.assertContains(english, "mediaid-logo-en-on-dark")
+
     def test_english_toggle(self):
         response = self.client.post(reverse("set_language"), {"language": "en", "next": "/"}, follow=True)
         self.assertContains(response, "Brand or generic name")

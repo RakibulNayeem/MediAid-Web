@@ -56,9 +56,9 @@ a, button { touch-action: manipulation; -webkit-tap-highlight-color: transparent
 /* Header */
 .site-header { position: sticky; top: 0; z-index: 20; color: #fff; background: var(--primary-dark); }
 .header-inner { display: flex; align-items: center; gap: .5rem; min-height: 3.5rem; }
-.logo { display: inline-flex; align-items: center; gap: .5rem; color: #fff; font-weight: 700; font-size: 1.15rem; text-decoration: none; }
-.logo-mark { display: flex; align-items: center; justify-content: center; width: 2rem; height: 2rem; color: var(--primary-dark); background: #fff; border-radius: .625rem; }
-.logo-mark .icon { width: 1.25rem; height: 1.25rem; stroke-width: 2.6; }
+.logo { display: inline-flex; align-items: center; margin-left: -.5rem; } /* the logo file has its own clear space */
+.logo img { display: block; width: auto; height: 2.8rem; }
+.site-footer .logo img { height: 4.5rem; }
 .site-nav { display: none; gap: .25rem; margin-left: 1.25rem; }
 .site-nav a { padding: .375rem .75rem; color: rgba(255, 255, 255, .9); border-radius: 999px; font-size: .95rem; font-weight: 500; text-decoration: none; }
 .header-search { display: flex; align-items: center; justify-content: center; width: 2.75rem; height: 2.75rem; margin-left: auto; color: #fff; border-radius: 999px; }
