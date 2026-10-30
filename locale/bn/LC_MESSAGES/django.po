@@ -308,3 +308,6 @@ msgstr "\"%(query)s\" পাওয়া যায়নি।"
 
 msgid "Check the spelling, or try the generic name written on the packet."
 msgstr "বানান দেখে নিন, অথবা প্যাকেটে লেখা জেনেরিক নাম দিয়ে খুঁজুন।"
+
+msgid "Medicine information and cheaper alternatives, in one place"
+msgstr "ওষুধের তথ্য ও কম দামের বিকল্প, এক জায়গায়"

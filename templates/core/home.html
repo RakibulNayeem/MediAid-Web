@@ -1,28 +1,31 @@
 {% extends "base.html" %}{% load i18n mediaid %}
 {% block header_search %}{% endblock %}
-{% block content %}
+{% block hero %}
 <section class="hero">
-  <h1 class="visually-hidden">{% translate "Search medicines" %}</h1>
-  {% include "medicines/_search_form.html" %}
-  {% include "emergency/_strip.html" %}
+  <div class="container">
+    <h1>{% translate "Medicine information and cheaper alternatives, in one place" %}</h1>
+    {% include "medicines/_search_form.html" %}
+  </div>
 </section>
+{% endblock %}
+{% block content %}
+{% include "emergency/_strip.html" %}
 
 {% if save_money %}
 <section class="section">
   <h2>{% translate "Save money" %}</h2>
   <p class="muted section-note">{% translate "The same generic, strength and form from another company, at a lower price. Ask your doctor or pharmacist before switching." %}</p>
-  <div class="card-grid">
+  <div class="save-list">
     {% for card in save_money %}
-    <a class="card save-card" href="{{ card.medicine.get_absolute_url }}">
-      <span class="badge badge-save">{% blocktranslate with amount=card.saving|taka percent=card.percent|num %}Save {{ amount }} ({{ percent }}%){% endblocktranslate %}</span>
-      <strong class="card-title">{{ card.medicine|localized:"brand_name" }} <span class="muted">{{ card.medicine.strength|num }}</span></strong>
-      <span class="muted">{{ card.medicine.generic|localized }}</span>
-      <span class="compare">
-        <span>{{ card.medicine.price|taka }}</span>
-        <span aria-hidden="true">→</span>
-        <strong class="save-price">{{ card.cheapest|localized:"brand_name" }} {{ card.cheapest.price|taka }}</strong>
+    <a class="save-row" href="{{ card.medicine.get_absolute_url }}">
+      <span class="card-main">
+        <strong class="card-title">{{ card.medicine|localized:"brand_name" }} <span class="muted">{{ card.medicine.strength|num }}</span></strong>
+        <span class="muted small">{{ card.medicine.generic|localized }}{% if card.medicine.is_sample %} · {% translate "Sample" %}{% endif %}</span>
       </span>
-      <span class="muted small">{{ card.medicine.price_unit|num }}{% if card.medicine.is_sample %} · {% translate "Sample" %}{% endif %}</span>
+      <span class="card-price">
+        <span class="badge badge-save">{% blocktranslate with amount=card.saving|taka percent=card.percent|num %}Save {{ amount }} ({{ percent }}%){% endblocktranslate %}</span>
+        <span class="small">{{ card.cheapest|localized:"brand_name" }} <strong class="save-price">{{ card.cheapest.price|taka }}</strong></span>
+      </span>
     </a>
     {% endfor %}
   </div>
@@ -42,10 +45,10 @@
 
 <section class="section">
   <h2>{% translate "Browse" %}</h2>
-  <ul class="grouped">
-    <li><a href="{% url 'medicines:generic_list' %}">{% translate "Generics" %}</a></li>
-    <li><a href="{% url 'medicines:manufacturer_list' %}">{% translate "Manufacturers" %}</a></li>
-    <li><a href="{% url 'medicines:drug_class_list' %}">{% translate "Drug classes" %}</a></li>
-  </ul>
+  <div class="browse-grid">
+    <a class="browse-tile" href="{% url 'medicines:generic_list' %}">{% translate "Generics" %}</a>
+    <a class="browse-tile" href="{% url 'medicines:manufacturer_list' %}">{% translate "Manufacturers" %}</a>
+    <a class="browse-tile" href="{% url 'medicines:drug_class_list' %}">{% translate "Drug classes" %}</a>
+  </div>
 </section>
 {% endblock %}
