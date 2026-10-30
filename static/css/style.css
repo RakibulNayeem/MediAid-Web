@@ -60,12 +60,13 @@ a { color: var(--primary); }
 .hero { padding: 14px 0 6px; }
 .search-form { display: flex; gap: 8px; }
 .search-form input {
-  flex: 1; min-width: 0; min-height: 56px; padding: 0 14px; font: inherit; font-size: 1.05rem; color: var(--text);
+  flex: 1; min-width: 0; min-height: 56px; padding: 0 10px; font: inherit; font-size: 1.05rem; color: var(--text);
   background: var(--surface); border: 2px solid var(--primary); border-radius: var(--radius);
 }
-.search-form input::placeholder { color: var(--muted); font-size: .95rem; }
+/* shrinks on narrow phones so the whole hint stays readable */
+.search-form input::placeholder { color: var(--muted); font-size: min(.95rem, 3.9vw); }
 .search-form button {
-  min-height: 56px; padding: 0 16px; font: inherit; font-weight: 600; color: #fff;
+  min-height: 56px; padding: 0 12px; font: inherit; font-weight: 600; color: #fff;
   background: var(--primary); border: 0; border-radius: var(--radius); cursor: pointer;
 }
 .search-form button:hover { background: var(--primary-dark); }
