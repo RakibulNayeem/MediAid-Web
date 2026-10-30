@@ -323,3 +323,111 @@ msgstr "%(count)sটি নিবন্ধিত ওষুধ · %(makers)sট�
 
 msgid "Cheapest"
 msgstr "সবচেয়ে কম দাম"
+
+msgid "Log in"
+msgstr "লগইন"
+
+msgid "Log out"
+msgstr "লগআউট"
+
+msgid "Leaderboard"
+msgstr "লিডারবোর্ড"
+
+msgid "See the leaderboard"
+msgstr "লিডারবোর্ড দেখুন"
+
+msgid "Popular does not mean right for you. Only take a medicine your doctor or pharmacist has advised."
+msgstr "জনপ্রিয় মানেই আপনার জন্য সঠিক নয়। শুধু ডাক্তার বা ফার্মাসিস্টের পরামর্শ দেওয়া ওষুধই খান।"
+
+msgid "Most searched medicines"
+msgstr "সবচেয়ে বেশি খোঁজা ওষুধ"
+
+msgid "%(count)s searches"
+msgstr "%(count)s বার খোঁজা হয়েছে"
+
+msgid "Not enough searches yet."
+msgstr "এখনো যথেষ্ট অনুসন্ধান হয়নি।"
+
+msgid "Most prescribed medicines"
+msgstr "সবচেয়ে বেশি প্রেসক্রাইব করা ওষুধ"
+
+msgid "Coming soon, counted anonymously from confirmed prescriptions."
+msgstr "শিগগিরই আসছে, নিশ্চিত করা প্রেসক্রিপশন থেকে নাম প্রকাশ না করে গণনা করা হবে।"
+
+msgid "Sign In"
+msgstr "লগইন করুন"
+
+msgid "Sign Up"
+msgstr "অ্যাকাউন্ট খুলুন"
+
+msgid "Signup"
+msgstr "অ্যাকাউন্ট খুলুন"
+
+msgid "Sign Out"
+msgstr "লগআউট"
+
+msgid "Are you sure you want to sign out?"
+msgstr "আপনি কি লগআউট করতে চান?"
+
+msgid "Email"
+msgstr "ইমেইল"
+
+msgid "Email address"
+msgstr "ইমেইল ঠিকানা"
+
+msgid "Password"
+msgstr "পাসওয়ার্ড"
+
+msgid "Password (again)"
+msgstr "পাসওয়ার্ড (আবার লিখুন)"
+
+msgid "Remember Me"
+msgstr "আমাকে মনে রাখুন"
+
+msgid "Forgot your password?"
+msgstr "পাসওয়ার্ড ভুলে গেছেন?"
+
+msgid "Password Reset"
+msgstr "পাসওয়ার্ড রিসেট"
+
+msgid "Reset My Password"
+msgstr "পাসওয়ার্ড রিসেট করুন"
+
+msgid "Email Verification"
+msgstr "ইমেইল যাচাই"
+
+msgid "Enter Email Verification Code"
+msgstr "ইমেইলে পাওয়া কোড লিখুন"
+
+msgid "Code"
+msgstr "কোড"
+
+msgid "Confirm"
+msgstr "নিশ্চিত করুন"
+
+msgid "Cancel"
+msgstr "বাতিল"
+
+msgid "Use a different email address"
+msgstr "অন্য ইমেইল ব্যবহার করুন"
+
+msgid "If you have not created an account yet, then please %(link)ssign up%(end_link)s first."
+msgstr "অ্যাকাউন্ট না থাকলে আগে %(link)sঅ্যাকাউন্ট খুলুন%(end_link)s।"
+
+msgid "Already have an account? Then please %(link)ssign in%(end_link)s."
+msgstr "আগে থেকেই অ্যাকাউন্ট আছে? তাহলে %(link)sলগইন করুন%(end_link)s।"
+
+msgid "Forgotten your password? Enter your email address below, and we'll send you an email allowing you to reset it."
+msgstr "পাসওয়ার্ড ভুলে গেছেন? নিচে ইমেইল লিখুন, পাসওয়ার্ড রিসেট করার জন্য আমরা ইমেইল পাঠাব।"
+
+msgid "Please contact us if you have any trouble resetting your password."
+msgstr "পাসওয়ার্ড রিসেটে সমস্যা হলে আমাদের জানান।"
+
+msgid "Your password can’t be too similar to your other personal information."
+msgstr "পাসওয়ার্ড আপনার ব্যক্তিগত তথ্যের সাথে খুব বেশি মিল থাকা যাবে না।"
+
+msgid "Your password can’t be a commonly used password."
+msgstr "খুব প্রচলিত পাসওয়ার্ড ব্যবহার করা যাবে না।"
+
+msgid "Your password can’t be entirely numeric."
+msgstr "পাসওয়ার্ড শুধু সংখ্যা দিয়ে হতে পারবে না।"

@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.contrib import admin
 from django.urls import include, path
 
@@ -12,3 +13,5 @@ urlpatterns = [
     path("emergency/", include("emergency.urls")),
     path("", include("core.urls")),
 ]
+if settings.ACCOUNTS_ENABLED:
+    urlpatterns.insert(0, path("accounts/", include("allauth.urls")))
