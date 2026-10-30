@@ -11,7 +11,7 @@
   {% if generics %}
   <div class="chip-list generic-shortcuts">
     {% for generic in generics %}
-      <a class="chip chip-green" href="{{ generic.get_absolute_url }}">{% blocktranslate with name=generic.name %}About {{ name }}{% endblocktranslate %}</a>
+      <a class="chip chip-green" href="{{ generic.get_absolute_url }}">{% blocktranslate with name=generic|dual %}About {{ name }}{% endblocktranslate %}</a>
     {% endfor %}
   </div>
   {% endif %}
