@@ -1,0 +1,23 @@
+{% extends "base.html" %}{% load i18n mediaid %}
+{% block title %}{% translate "Generics" %} | {% translate "MediAid" %}{% endblock %}
+{% block content %}
+<section class="section">
+  <h1>{% translate "Generics" %}</h1>
+  <form class="search-form search-form-small" method="get">
+    <input type="search" name="q" value="{{ query }}" maxlength="100" placeholder="{% translate "Filter by name" %}" aria-label="{% translate "Filter by name" %}">
+    <button type="submit">{% translate "Search" %}</button>
+  </form>
+  <div class="card-list">
+    {% for generic in page %}
+    <a class="card" href="{{ generic.get_absolute_url }}">
+      <span class="card-main">
+        <strong class="card-title">{{ generic.name }}</strong>
+        {% if generic.drug_class %}<span class="muted small">{{ generic.drug_class|localized }}</span>{% endif %}
+      </span>
+      <span class="muted small">{% blocktranslate with count=generic.brand_count|num %}{{ count }} brands{% endblocktranslate %}</span>
+    </a>
+    {% empty %}<p class="muted">{% translate "Nothing found." %}</p>{% endfor %}
+  </div>
+  {% include "medicines/_pagination.html" %}
+</section>
+{% endblock %}

@@ -1,0 +1,31 @@
+{% extends "admin/base_site.html" %}
+{% block content %}
+{% if result %}
+  {% if result.ok %}
+    <p class="success">
+      {% if result.dry_run %}The file looks good. Saving it would add {{ result.created }} new and update {{ result.updated }} existing rows ({{ result.unchanged }} unchanged). Nothing has been saved yet: untick "Check only" and upload again to save.
+      {% else %}Saved: {{ result.created }} new, {{ result.updated }} updated, {{ result.unchanged }} unchanged.{% endif %}
+    </p>
+  {% else %}
+    <p class="errornote">{{ result.errors|length }} problem(s) found. Nothing was saved. Fix the file and upload it again.</p>
+    <ul>
+      {% for error in errors_shown %}<li>{{ error }}</li>{% endfor %}
+      {% if errors_hidden %}<li>...and {{ errors_hidden }} more.</li>{% endif %}
+    </ul>
+  {% endif %}
+{% endif %}
+
+<form method="post" enctype="multipart/form-data">
+  {% csrf_token %}
+  {{ form.as_p }}
+  <input type="submit" value="Upload" class="default">
+</form>
+
+<h2>File format</h2>
+<p>A UTF-8 CSV file (in Excel: Save As, then "CSV UTF-8"). The first row must hold the column names. Only load data from official sources: DGDA lists and product leaflets. Files over about 4 MB: use <code>python manage.py import_csv</code> instead (see README).</p>
+<p><strong>Medicines columns:</strong> {{ medicine_columns|join:", " }}</p>
+<p>Required: brand_name, generic, strength, dosage_form, manufacturer. Savings only show between brands with the same price_unit, so fill it in (e.g. "1 tablet").</p>
+<p><strong>Generic information columns:</strong> {{ generic_columns|join:", " }}</p>
+<p>Required: generic. In the long text columns, "|" starts a new bullet point.</p>
+<p>Blank cells never erase what is already stored. Examples: <code>sample_data/</code> in the repo.</p>
+{% endblock %}

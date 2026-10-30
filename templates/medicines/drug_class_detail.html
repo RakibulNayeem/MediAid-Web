@@ -1,0 +1,17 @@
+{% extends "base.html" %}{% load i18n mediaid %}
+{% block title %}{{ item.name }} | {% translate "MediAid" %}{% endblock %}
+{% block content %}
+<nav class="breadcrumb" aria-label="{% translate "Browse" %}"><a href="{% url 'medicines:drug_class_list' %}">{% translate "Drug classes" %}</a></nav>
+<section class="section">
+  <h1>{{ item|localized }}</h1>
+  <div class="card-list">
+    {% for generic in page %}
+    <a class="card" href="{{ generic.get_absolute_url }}">
+      <strong class="card-title">{{ generic.name }}</strong>
+      <span class="muted small">{% blocktranslate with count=generic.brand_count|num %}{{ count }} brands{% endblocktranslate %}</span>
+    </a>
+    {% empty %}<p class="muted">{% translate "Nothing found." %}</p>{% endfor %}
+  </div>
+  {% include "medicines/_pagination.html" %}
+</section>
+{% endblock %}

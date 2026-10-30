@@ -1,0 +1,6 @@
+{% load i18n %}<nav class="emergency-strip" aria-label="{% translate "Emergency services" %}">
+  <a href="{% url 'emergency:section' 'doctor' %}"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3H5v6a4.5 4.5 0 0 0 9 0V3h-1"/><path d="M9.5 13.500V16a4 4 0 0 0 8 0v-2"/><circle cx="17.5" cy="12" r="2"/></svg>{% translate "Doctor" %}</a>
+  <a href="{% url 'emergency:section' 'blood' %}"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3s6.5 7 6.5 11.5a6.5 6.5 0 0 1-13 0C5.5 10 12 3 12 3Z"/></svg>{% translate "Find blood" %}</a>
+  <a href="{% url 'emergency:section' 'ambulance' %}"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 7h11v10H3zM14 10h4l3 3v4h-7z"/><circle cx="7.5" cy="18" r="1.8"/><circle cx="17" cy="18" r="1.8"/><path d="M8.5 9.500v4M6.5 11.500h4"/></svg>{% translate "Ambulance" %}</a>
+  <a href="{% url 'emergency:section' 'hospital' %}"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 21V5a1 1 0 0 1 1-1h12a1 1 0 0 1 1 1v16M3 21h18M12 7.500v5M9.5 10h5M10 21v-4h4v4"/></svg>{% translate "Hospital" %}</a>
+</nav>

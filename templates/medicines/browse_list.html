@@ -1,0 +1,16 @@
+{% extends "base.html" %}{% load i18n mediaid %}
+{% block title %}{% if kind == "manufacturer" %}{% translate "Manufacturers" %}{% else %}{% translate "Drug classes" %}{% endif %} | {% translate "MediAid" %}{% endblock %}
+{% block content %}
+<section class="section">
+  <h1>{% if kind == "manufacturer" %}{% translate "Manufacturers" %}{% else %}{% translate "Drug classes" %}{% endif %}</h1>
+  <div class="card-list">
+    {% for item in page %}
+    <a class="card" href="{{ item.get_absolute_url }}">
+      <strong class="card-title">{{ item|localized }}</strong>
+      <span class="muted small">{% if kind == "manufacturer" %}{% blocktranslate with count=item.brand_count|num %}{{ count }} brands{% endblocktranslate %}{% else %}{% blocktranslate with count=item.brand_count|num %}{{ count }} generics{% endblocktranslate %}{% endif %}</span>
+    </a>
+    {% empty %}<p class="muted">{% translate "Nothing found." %}</p>{% endfor %}
+  </div>
+  {% include "medicines/_pagination.html" %}
+</section>
+{% endblock %}

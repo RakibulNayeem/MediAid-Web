@@ -1,0 +1,9 @@
+{% extends "base.html" %}{% load i18n %}
+{% block title %}{% translate "Page not found" %} | {% translate "MediAid" %}{% endblock %}
+{% block content %}
+<section class="section empty">
+  <h1>{% translate "Page not found" %}</h1>
+  <p class="muted">{% translate "Search for a medicine instead:" %}</p>
+  {% include "medicines/_search_form.html" %}
+</section>
+{% endblock %}

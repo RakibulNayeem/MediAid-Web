@@ -1,0 +1,325 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-10-30 22:14+0600\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+msgid "Bangla"
+msgstr "বাংলা"
+
+msgid "English"
+msgstr "English"
+
+msgid "Find blood"
+msgstr "রক্ত খুঁজুন"
+
+msgid "Ambulance"
+msgstr "অ্যাম্বুলেন্স"
+
+msgid "Hospital"
+msgstr "হাসপাতাল"
+
+msgid "Doctor"
+msgstr "ডাক্তার"
+
+msgid "Emergency services"
+msgstr "জরুরি সেবা"
+
+msgid "What's in the file?"
+msgstr ""
+
+msgid "Medicines (brands and prices)"
+msgstr ""
+
+msgid "Generic information pages"
+msgstr ""
+
+msgid "CSV file"
+msgstr ""
+
+msgid "Check only, don't save"
+msgstr ""
+
+msgid "Untick this after the check passes to save the data."
+msgstr ""
+
+msgid "Bangla name"
+msgstr ""
+
+msgid "sample data"
+msgstr ""
+
+msgid "Test data, not from an official source."
+msgstr ""
+
+msgid "what it's for (Bangla)"
+msgstr ""
+
+msgid "One point per line."
+msgstr ""
+
+msgid "how to take it (Bangla)"
+msgstr ""
+
+msgid "common side effects (Bangla)"
+msgstr ""
+
+msgid "warnings (Bangla)"
+msgstr ""
+
+msgid "information source"
+msgstr ""
+
+msgid "e.g. the official leaflet this text came from."
+msgstr ""
+
+msgid "Bangla brand name"
+msgstr ""
+
+msgid "As printed, e.g. 500 mg"
+msgstr ""
+
+msgid "In taka, for the unit below."
+msgstr ""
+
+msgid "price is for"
+msgstr ""
+
+msgid "e.g. 1 tablet, 60 ml bottle. Savings are only shown between the same unit."
+msgstr ""
+
+msgid "DGDA registration no."
+msgstr ""
+
+msgid "show on site"
+msgstr ""
+
+msgid "show on home page"
+msgstr ""
+
+msgid "Page not found"
+msgstr "পেজটি পাওয়া যায়নি"
+
+msgid "MediAid"
+msgstr "মেডিএইড"
+
+msgid "Search for a medicine instead:"
+msgstr "এর বদলে ওষুধ খুঁজুন:"
+
+msgid "MediAid - medicine information and emergency help"
+msgstr "মেডিএইড - ওষুধের তথ্য ও জরুরি সেবা"
+
+msgid "Find medicine information, cheaper alternatives and emergency help in Bangladesh."
+msgstr "বাংলাদেশে ওষুধের তথ্য, কম দামের বিকল্প ও জরুরি সেবা খুঁজুন।"
+
+msgid "Browse"
+msgstr "ব্রাউজ করুন"
+
+msgid "Generics"
+msgstr "জেনেরিক"
+
+msgid "Manufacturers"
+msgstr "কোম্পানি"
+
+msgid "Drug classes"
+msgstr "ওষুধের শ্রেণি"
+
+msgid "Emergency"
+msgstr "জরুরি"
+
+msgid "MediAid provides information only. It is not medical advice. Always consult a doctor or pharmacist before starting, stopping or changing a medicine."
+msgstr "মেডিএইড শুধু তথ্য দেয়, এটি চিকিৎসা পরামর্শ নয়। কোনো ওষুধ শুরু, বন্ধ বা পরিবর্তন করার আগে অবশ্যই ডাক্তার বা ফার্মাসিস্টের পরামর্শ নিন।"
+
+msgid "In an emergency, call 999."
+msgstr "জরুরি অবস্থায় ৯৯৯ নম্বরে কল করুন।"
+
+msgid "Search medicines"
+msgstr "ওষুধ খুঁজুন"
+
+msgid "Save money"
+msgstr "টাকা বাঁচান"
+
+msgid "The same generic, strength and form from another company, at a lower price. Ask your doctor or pharmacist before switching."
+msgstr "একই জেনেরিক, একই শক্তি ও একই ধরনের ওষুধ, অন্য কোম্পানির, কম দামে। ব্র্যান্ড বদলানোর আগে ডাক্তার বা ফার্মাসিস্টকে জিজ্ঞেস করুন।"
+
+#, python-format
+msgid "Save %(amount)s (%(percent)s%%)"
+msgstr "%(amount)s বাঁচান (%(percent)s%%)"
+
+msgid "Sample"
+msgstr "নমুনা"
+
+msgid "Commonly searched"
+msgstr "বেশি খোঁজা ওষুধ"
+
+msgid "This service is coming soon. If you need urgent help now, call:"
+msgstr "এই সেবাটি শিগগিরই আসছে। এখনই জরুরি সাহায্য দরকার হলে কল করুন:"
+
+msgid "999 - National emergency"
+msgstr "৯৯৯ - জাতীয় জরুরি সেবা"
+
+msgid "16263 - Health helpline"
+msgstr "১৬২৬৩ - স্বাস্থ্য বাতায়ন"
+
+msgid "Information only."
+msgstr "শুধু তথ্যের জন্য।"
+
+msgid "This is not medical advice. Consult a doctor or pharmacist before taking or changing any medicine."
+msgstr "এটি চিকিৎসা পরামর্শ নয়। কোনো ওষুধ খাওয়া বা বদলানোর আগে ডাক্তার বা ফার্মাসিস্টের পরামর্শ নিন।"
+
+msgid "Price not available"
+msgstr "দাম জানা নেই"
+
+msgid "Pages"
+msgstr "পেজ"
+
+msgid "Previous"
+msgstr "আগের"
+
+msgid "Next"
+msgstr "পরের"
+
+msgid "Sample data."
+msgstr "নমুনা তথ্য।"
+
+msgid "This entry is for testing. Its details and price are not verified, so do not rely on them."
+msgstr "এটি পরীক্ষার জন্য। এর তথ্য ও দাম যাচাই করা হয়নি, তাই এর ওপর নির্ভর করবেন না।"
+
+msgid "Brand or generic name"
+msgstr "ওষুধের নাম লিখুন — ব্র্যান্ড বা জেনেরিক"
+
+msgid "Search"
+msgstr "খুঁজুন"
+
+msgid "No brands listed yet."
+msgstr "এখনো কোনো ব্র্যান্ড যোগ করা হয়নি।"
+
+#, python-format
+msgid "%(count)s brands"
+msgstr "%(count)sটি ব্র্যান্ড"
+
+#, python-format
+msgid "%(count)s generics"
+msgstr "%(count)sটি জেনেরিক"
+
+msgid "Nothing found."
+msgstr "কিছু পাওয়া যায়নি।"
+
+msgid "This information is currently available in Bangla only."
+msgstr ""
+
+msgid "What it's for"
+msgstr "কেন ব্যবহার করা হয়"
+
+msgid "How to take it"
+msgstr "কীভাবে খাবেন"
+
+msgid "Common side effects"
+msgstr "সাধারণ পার্শ্বপ্রতিক্রিয়া"
+
+msgid "Warnings"
+msgstr "সতর্কতা"
+
+msgid "Source:"
+msgstr "সূত্র:"
+
+msgid "Information for this generic has not been added yet."
+msgstr "এই জেনেরিকের তথ্য এখনো যোগ করা হয়নি।"
+
+#, python-format
+msgid "Brands of %(name)s"
+msgstr "%(name)s-এর ব্র্যান্ডসমূহ"
+
+msgid "Filter by name"
+msgstr "নাম দিয়ে খুঁজুন"
+
+msgid "Generic"
+msgstr "জেনেরিক"
+
+msgid "Strength"
+msgstr "শক্তি"
+
+msgid "Form"
+msgstr "ধরন"
+
+msgid "Manufacturer"
+msgstr "কোম্পানি"
+
+msgid "Price"
+msgstr "দাম"
+
+#, python-format
+msgid "Price checked: %(date)s"
+msgstr "দাম যাচাই: %(date)s"
+
+#, python-format
+msgid "What is %(name)s? Uses, side effects, warnings"
+msgstr "%(name)s কী? ব্যবহার, পার্শ্বপ্রতিক্রিয়া, সতর্কতা"
+
+msgid "Cheaper alternatives"
+msgstr "কম দামের বিকল্প"
+
+#, python-format
+msgid "You could save up to %(amount)s"
+msgstr "সর্বোচ্চ %(amount)s বাঁচাতে পারেন"
+
+msgid "No cheaper brand found. Other brands with the same generic, strength and form:"
+msgstr "এর চেয়ে কম দামের ব্র্যান্ড পাওয়া যায়নি। একই জেনেরিক, শক্তি ও ধরনের অন্য ব্র্যান্ড:"
+
+msgid "No other brand with the same generic, strength and form is listed yet."
+msgstr "একই জেনেরিক, শক্তি ও ধরনের অন্য কোনো ব্র্যান্ড এখনো যোগ করা হয়নি।"
+
+msgid "This medicine"
+msgstr "এই ওষুধ"
+
+msgid "Same generic, strength and form. Ask your doctor or pharmacist before switching brands."
+msgstr "একই জেনেরিক, শক্তি ও ধরন। ব্র্যান্ড বদলানোর আগে ডাক্তার বা ফার্মাসিস্টকে জিজ্ঞেস করুন।"
+
+#, python-format
+msgid "%(query)s - search"
+msgstr "%(query)s - অনুসন্ধান"
+
+msgid "Type a medicine name to search."
+msgstr "খুঁজতে ওষুধের নাম লিখুন।"
+
+#, python-format
+msgid "About %(name)s"
+msgstr "%(name)s সম্পর্কে জানুন"
+
+#, python-format
+msgid "No exact match for \"%(query)s\". Closest matches:"
+msgstr "\"%(query)s\" হুবহু পাওয়া যায়নি। কাছাকাছি ফলাফল:"
+
+#, python-format
+msgid "Nothing found for \"%(query)s\"."
+msgstr "\"%(query)s\" পাওয়া যায়নি।"
+
+msgid "Check the spelling, or try the generic name written on the packet."
+msgstr "বানান দেখে নিন, অথবা প্যাকেটে লেখা জেনেরিক নাম দিয়ে খুঁজুন।"
+
+msgid "Medicine information and cheaper alternatives, in one place"
+msgstr "ওষুধের তথ্য ও কম দামের বিকল্প, এক জায়গায়"
+
+msgid "We don't have all the prices yet, so we can't say which is cheapest. Other brands with the same generic, strength and form:"
+msgstr "সব দাম এখনো আমাদের কাছে নেই, তাই কোনটি সবচেয়ে সস্তা তা বলা যাচ্ছে না। একই জেনেরিক, শক্তি ও ধরনের অন্য ব্র্যান্ড:"
+
+msgid "%(count)s more brands"
+msgstr "আরও %(count)sটি ব্র্যান্ড"
+
+msgid "%(count)s registered medicines · %(makers)s companies"
+msgstr "%(count)sটি নিবন্ধিত ওষুধ · %(makers)sটি কোম্পানি"
+
+msgid "Cheapest"
+msgstr "সবচেয়ে কম দাম"
