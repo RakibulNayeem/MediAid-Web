@@ -18,6 +18,7 @@ def search(request):
     results, was_fuzzy = search_medicines(query)
     return render(request, "medicines/search.html", {
         "query": query,
+        "autofocus": not query,  # arriving from the header's search icon: ready to type
         "page": _page(request, results),
         "was_fuzzy": was_fuzzy,
         "generics": matching_generics(query),

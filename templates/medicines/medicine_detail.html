@@ -2,16 +2,17 @@
 {% block title %}{{ medicine.brand_name }} {{ medicine.strength }} {{ medicine.dosage_form.name }} | {% translate "MediAid" %}{% endblock %}
 {% block description %}{{ medicine.brand_name }} {{ medicine.strength }} - {{ medicine.generic.name }}, {{ medicine.manufacturer.name }}{% endblock %}
 {% block content %}
+<nav class="breadcrumb" aria-label="{% translate "Browse" %}"><a href="{% url 'medicines:generic_list' %}">{% translate "Generics" %}</a><span aria-hidden="true">›</span><a href="{{ medicine.generic.get_absolute_url }}">{{ medicine.generic|localized }}</a></nav>
 {% if medicine.is_sample %}{% include "medicines/_sample_notice.html" %}{% endif %}
 
 <section class="section">
   <h1>{{ medicine|localized:"brand_name" }} <span class="muted">{{ medicine.strength|num }}</span></h1>
   <dl class="facts">
-    <dt>{% translate "Generic" %}</dt><dd><a href="{{ medicine.generic.get_absolute_url }}">{{ medicine.generic|localized }}</a></dd>
-    <dt>{% translate "Strength" %}</dt><dd>{{ medicine.strength|num }}</dd>
-    <dt>{% translate "Form" %}</dt><dd>{{ medicine.dosage_form|localized }}</dd>
-    <dt>{% translate "Manufacturer" %}</dt><dd><a href="{{ medicine.manufacturer.get_absolute_url }}">{{ medicine.manufacturer|localized }}</a></dd>
-    <dt>{% translate "Price" %}</dt>
+    <div class="fact"><dt>{% translate "Generic" %}</dt><dd><a href="{{ medicine.generic.get_absolute_url }}">{{ medicine.generic|localized }}</a></dd></div>
+    <div class="fact"><dt>{% translate "Strength" %}</dt><dd>{{ medicine.strength|num }}</dd></div>
+    <div class="fact"><dt>{% translate "Form" %}</dt><dd>{{ medicine.dosage_form|localized }}</dd></div>
+    <div class="fact"><dt>{% translate "Manufacturer" %}</dt><dd><a href="{{ medicine.manufacturer.get_absolute_url }}">{{ medicine.manufacturer|localized }}</a></dd></div>
+    <div class="fact"><dt>{% translate "Price" %}</dt>
     <dd>
       {% if medicine.price is not None %}
         <strong class="price">{{ medicine.price|taka }}</strong>{% if medicine.price_unit %} <span class="muted">/ {{ medicine.price_unit|num }}</span>{% endif %}
@@ -19,7 +20,7 @@
       {% else %}
         <span class="muted">{% translate "Price not available" %}</span>
       {% endif %}
-    </dd>
+    </dd></div>
   </dl>
   <a class="button-secondary" href="{{ medicine.generic.get_absolute_url }}">{% blocktranslate with name=medicine.generic|localized %}What is {{ name }}? Uses, side effects, warnings{% endblocktranslate %}</a>
 </section>

@@ -11,7 +11,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="{% static 'css/style.css' %}">
 </head>
-<body>
+<body ontouchstart="">
   <header class="site-header">
     <div class="container header-inner">
       <a class="logo" href="{% url 'core:home' %}">{% translate "MediAid" %}</a>
@@ -20,6 +20,7 @@
         <a href="{% url 'medicines:manufacturer_list' %}">{% translate "Manufacturers" %}</a>
         <a href="{% url 'medicines:drug_class_list' %}">{% translate "Drug classes" %}</a>
       </nav>
+      {% block header_search %}<a class="header-search" href="{% url 'medicines:search' %}" aria-label="{% translate "Search medicines" %}"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="m16 16 4.5 4.5"/></svg></a>{% endblock %}
       <form class="lang-toggle" action="{% url 'set_language' %}" method="post">
         {% csrf_token %}
         <input type="hidden" name="next" value="{{ request.get_full_path }}">

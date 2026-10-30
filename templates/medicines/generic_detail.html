@@ -1,6 +1,7 @@
 {% extends "base.html" %}{% load i18n mediaid %}
 {% block title %}{{ generic.name }} | {% translate "MediAid" %}{% endblock %}
 {% block content %}
+<nav class="breadcrumb" aria-label="{% translate "Browse" %}"><a href="{% url 'medicines:generic_list' %}">{% translate "Generics" %}</a></nav>
 {% if generic.is_sample %}{% include "medicines/_sample_notice.html" %}{% endif %}
 
 <section class="section">
