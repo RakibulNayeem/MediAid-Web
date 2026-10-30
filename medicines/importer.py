@@ -9,7 +9,7 @@ from dataclasses import dataclass, field
 from datetime import date
 from decimal import Decimal, InvalidOperation
 
-from django.db import transaction
+from django.db import connection, transaction
 from django.utils.text import slugify
 
 from .models import DosageForm, DrugClass, Generic, Manufacturer, Medicine
@@ -121,7 +121,11 @@ def import_medicines(data, dry_run=False):
             if dry_run or result.errors:
                 raise _Rollback
     except _Rollback:
-        pass
+        return result
+    if connection.vendor == "postgresql":
+        # Tells PostgreSQL the table changed, so searches use the trigram index straight away.
+        with connection.cursor() as cursor:
+            cursor.execute("ANALYZE medicines_medicine")
     return result
 
 
