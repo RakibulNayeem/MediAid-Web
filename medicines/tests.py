@@ -14,6 +14,7 @@ from .management.commands.convert_dgda import OUTPUT_COLUMNS, convert_rows
 from .management.commands.fetch_dgda_prices import choose_price, parse_price_page
 from .models import DosageForm, Generic, Manufacturer, Medicine
 from .search import matching_generics, search_medicines
+from .transliterate import form_to_bangla, to_bangla
 from .text import bangla_to_latin, normalize, normalize_strength, sound_key
 
 
@@ -250,16 +251,20 @@ class PageTests(TestCase):
         medicine.refresh_from_db()
         self.assertEqual(medicine.view_count, 1)
 
-    def test_medicine_names_stay_as_on_the_packet_on_the_bangla_site(self):
+    def test_bangla_site_shows_bangla_names_with_the_english_beside_them(self):
         medicine = Medicine.objects.get(brand_name="Napa")
         response = self.client.get(medicine.get_absolute_url())
-        self.assertContains(response, "Napa <span class=\"muted\">500 mg</span>")
-        self.assertContains(response, "1 tablet")
-        self.assertNotContains(response, "নাপা")
-        self.assertNotContains(response, "৫০০ mg")
-        self.assertContains(self.client.get(medicine.generic.get_absolute_url()), "<h1>Paracetamol</h1>")
+        self.assertContains(response, "নাপা (Napa)")
+        self.assertContains(response, "৫০০ mg")
+        self.assertContains(self.client.get(medicine.generic.get_absolute_url()), "<h1>প্যারাসিটামল (Paracetamol)</h1>")
         suggestion = self.client.get(reverse("medicines:suggest"), {"q": "নাপা"}).json()["results"][0]
-        self.assertEqual(suggestion["title"], "Napa 500 mg")
+        self.assertEqual(suggestion["title"], "নাপা (Napa) ৫০০ mg")
+
+    def test_english_site_shows_only_english_names(self):
+        self.client.post(reverse("set_language"), {"language": "en", "next": "/"})
+        response = self.client.get(Medicine.objects.get(brand_name="Napa").get_absolute_url())
+        self.assertContains(response, "Napa")
+        self.assertNotContains(response, "নাপা")
 
     def test_every_listing_page_loads(self):
         generic = Generic.objects.get(name="Paracetamol")
@@ -390,6 +395,31 @@ class ImportTests(TestCase):
         rows = "".join(f"Napa,Paracetamol,500 mg,Tablet,Maker {i},1,,,\n" for i in range(30))
         self.assertTrue(import_medicines(HEADER + rows).ok)
         self.assertEqual(Medicine.objects.values("slug").distinct().count(), 30)
+
+
+class BanglaNameTests(TestCase):
+    def test_spelling_by_sound(self):
+        self.assertEqual(to_bangla("Clonazepam"), "ক্লোনাজেপাম")
+        self.assertEqual(to_bangla("Cef-3"), "সেফ-3")
+        self.assertEqual(to_bangla("Paracetamol"), "প্যারাসিটামল")
+        self.assertEqual(to_bangla("AFDC-2"), "AFDC-2")
+
+    def test_forms_are_translated(self):
+        self.assertEqual(form_to_bangla("Eye Drops"), "চোখের ড্রপ")
+        self.assertEqual(form_to_bangla("XR Tablet"), "XR ট্যাবলেট")
+
+    def test_fill_marks_automatic_names_and_keeps_reviewed_ones(self):
+        checked = make_medicine("Napa", brand_name_bn="নাপা")
+        made = make_medicine("Clonazepam", Generic.objects.create(name="Clonazepam"), maker="Other")
+        call_command("fill_bangla_names", stdout=StringIO())
+        checked.refresh_from_db()
+        made.refresh_from_db()
+        self.assertEqual(checked.brand_name_bn, "নাপা")
+        self.assertFalse(checked.brand_name_bn_auto)
+        self.assertEqual(made.brand_name_bn, "ক্লোনাজেপাম")
+        self.assertTrue(made.brand_name_bn_auto)
+        self.assertEqual(made.generic.name_bn, "ক্লোনাজেপাম")
+        self.assertEqual([m.pk for m in search_medicines("ক্লোনাজেপাম")[0]], [made.pk])
 
 
 class DgdaConvertTests(TestCase):

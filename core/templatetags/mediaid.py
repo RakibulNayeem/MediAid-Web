@@ -49,3 +49,14 @@ def localized(obj, field="name"):
         if bangla:
             return bangla
     return getattr(obj, field)
+
+
+@register.filter
+def dual(obj, field="name"):
+    """Bangla site: 'নাপা (Napa)', keeping the English that's printed on the box. Otherwise just English."""
+    english = getattr(obj, field)
+    if get_language() == "bn":
+        bangla = getattr(obj, f"{field}_bn", "")
+        if bangla and bangla != english:
+            return f"{bangla} ({english})"
+    return english

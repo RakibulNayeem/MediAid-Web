@@ -19,7 +19,8 @@ def unique_slug(model, text, pk=None):
 
 class SluggedModel(models.Model):
     name = models.CharField(max_length=200, unique=True)
-    name_bn = models.CharField(_("Bangla name"), max_length=200, blank=True)
+    name_bn = models.CharField(_("Bangla name"), max_length=700, blank=True)
+    name_bn_auto = models.BooleanField(_("Bangla name is automatic"), default=False, help_text=_("Made by sound and not reviewed yet."))
     slug = models.SlugField(max_length=200, unique=True, blank=True)
     is_sample = models.BooleanField(_("sample data"), default=False, help_text=_("Test data, not from an official source."))
 
@@ -91,6 +92,7 @@ class Medicine(models.Model):
 
     brand_name = models.CharField(max_length=200)
     brand_name_bn = models.CharField(_("Bangla brand name"), max_length=200, blank=True)
+    brand_name_bn_auto = models.BooleanField(_("Bangla name is automatic"), default=False, help_text=_("Made by sound and not reviewed yet."))
     generic = models.ForeignKey(Generic, on_delete=models.PROTECT, related_name="medicines")
     strength = models.CharField(max_length=300, help_text=_("As printed, e.g. 500 mg"))
     dosage_form = models.ForeignKey(DosageForm, on_delete=models.PROTECT, related_name="medicines")

@@ -10,16 +10,21 @@ from .models import DosageForm, DrugClass, Generic, Manufacturer, Medicine
 
 @admin.register(Manufacturer, DrugClass, DosageForm)
 class NamedAdmin(admin.ModelAdmin):
-    list_display = ["name", "name_bn", "is_sample"]
-    list_filter = ["is_sample"]
+    list_display = ["name", "name_bn", "name_bn_auto", "is_sample"]
+    list_filter = ["is_sample", "name_bn_auto"]
     search_fields = ["name", "name_bn"]
     prepopulated_fields = {"slug": ["name"]}
+
+    def save_model(self, request, obj, form, change):
+        if "name_bn" in form.changed_data:  # a person has checked it now
+            obj.name_bn_auto = False
+        super().save_model(request, obj, form, change)
 
 
 @admin.register(Generic)
 class GenericAdmin(NamedAdmin):
     list_display = ["name", "name_bn", "drug_class", "has_info", "is_sample"]
-    list_filter = ["is_sample", "drug_class"]
+    list_filter = ["is_sample", "name_bn_auto", "drug_class"]
     autocomplete_fields = ["drug_class"]
 
     @admin.display(boolean=True, description="info page filled in")
@@ -30,13 +35,18 @@ class GenericAdmin(NamedAdmin):
 @admin.register(Medicine)
 class MedicineAdmin(admin.ModelAdmin):
     list_display = ["brand_name", "strength", "dosage_form", "generic", "manufacturer", "price", "price_unit", "is_active", "is_popular", "is_sample"]
-    list_filter = ["is_sample", "is_active", "is_popular", "dosage_form"]
+    list_filter = ["is_sample", "is_active", "is_popular", "brand_name_bn_auto", "dosage_form"]
     list_editable = ["price", "is_active", "is_popular"]
     search_fields = ["brand_name", "brand_name_bn", "generic__name", "generic__name_bn", "dgda_registration_no"]
     autocomplete_fields = ["generic", "dosage_form", "manufacturer"]
     prepopulated_fields = {"slug": ["brand_name", "strength"]}
     list_select_related = ["generic", "dosage_form", "manufacturer"]
     change_list_template = "admin/medicines/medicine/change_list.html"
+
+    def save_model(self, request, obj, form, change):
+        if "brand_name_bn" in form.changed_data:
+            obj.brand_name_bn_auto = False
+        super().save_model(request, obj, form, change)
 
     def get_urls(self):
         return [
