@@ -12,10 +12,12 @@
 
 {% if generic.uses or generic.how_to_take or generic.side_effects or generic.warnings %}
   {% if LANGUAGE_CODE != "bn" %}<p class="muted">{% translate "This information is currently available in Bangla only." %}</p>{% endif %}
+  <div class="info-grid">
   {% if generic.uses %}<section class="section info-block"><h2>{% translate "What it's for" %}</h2><ul lang="bn">{% for line in generic.uses|lines %}<li>{{ line }}</li>{% endfor %}</ul></section>{% endif %}
   {% if generic.how_to_take %}<section class="section info-block"><h2>{% translate "How to take it" %}</h2><ul lang="bn">{% for line in generic.how_to_take|lines %}<li>{{ line }}</li>{% endfor %}</ul></section>{% endif %}
   {% if generic.side_effects %}<section class="section info-block"><h2>{% translate "Common side effects" %}</h2><ul lang="bn">{% for line in generic.side_effects|lines %}<li>{{ line }}</li>{% endfor %}</ul></section>{% endif %}
   {% if generic.warnings %}<section class="section info-block info-warning"><h2>{% translate "Warnings" %}</h2><ul lang="bn">{% for line in generic.warnings|lines %}<li>{{ line }}</li>{% endfor %}</ul></section>{% endif %}
+  </div>
   {% if generic.source %}<p class="muted small">{% translate "Source:" %} {{ generic.source }}</p>{% endif %}
 {% else %}
   <p class="muted">{% translate "Information for this generic has not been added yet." %}</p>

@@ -8,13 +8,13 @@
   <meta name="theme-color" content="#064E3B">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+Bengali:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="{% static 'css/style.css' %}">
 </head>
 <body ontouchstart="">
   <header class="site-header">
     <div class="container header-inner">
-      <a class="logo" href="{% url 'core:home' %}">{% translate "MediAid" %}</a>
+      <a class="logo" href="{% url 'core:home' %}"><span class="logo-mark"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></span>{% translate "MediAid" %}</a>
       <nav class="site-nav" aria-label="{% translate "Browse" %}">
         <a href="{% url 'medicines:generic_list' %}">{% translate "Generics" %}</a>
         <a href="{% url 'medicines:manufacturer_list' %}">{% translate "Manufacturers" %}</a>
@@ -39,18 +39,22 @@
   </main>
 
   <footer class="site-footer">
-    <div class="container">
-      <p class="footer-links">
+    <div class="container footer-grid">
+      <div>
+        <a class="logo" href="{% url 'core:home' %}"><span class="logo-mark"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></span>{% translate "MediAid" %}</a>
+        <p>{% translate "MediAid provides information only. It is not medical advice. Always consult a doctor or pharmacist before starting, stopping or changing a medicine." %}</p>
+        <p>{% translate "In an emergency, call 999." %}</p>
+      </div>
+      <nav class="footer-links" aria-label="{% translate "Browse" %}">
         <a href="{% url 'medicines:generic_list' %}">{% translate "Generics" %}</a>
         <a href="{% url 'medicines:manufacturer_list' %}">{% translate "Manufacturers" %}</a>
         <a href="{% url 'medicines:drug_class_list' %}">{% translate "Drug classes" %}</a>
         <a href="{% url 'emergency:hub' %}">{% translate "Emergency" %}</a>
-      </p>
-      <p>{% translate "MediAid provides information only. It is not medical advice. Always consult a doctor or pharmacist before starting, stopping or changing a medicine." %}</p>
-      <p>{% translate "In an emergency, call 999." %}</p>
+      </nav>
     </div>
   </footer>
 
-  <a class="emergency-fab" href="{% url 'emergency:hub' %}">{% translate "Emergency" %}</a>
+  <script src="{% static 'js/search-suggest.js' %}" defer></script>
+  <a class="emergency-fab" href="{% url 'emergency:hub' %}"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>{% translate "Emergency" %}</a>
 </body>
 </html>

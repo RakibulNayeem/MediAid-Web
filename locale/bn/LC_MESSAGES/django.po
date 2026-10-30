@@ -261,8 +261,8 @@ msgid "Price"
 msgstr "দাম"
 
 #, python-format
-msgid "Price updated: %(date)s"
-msgstr "দাম হালনাগাদ: %(date)s"
+msgid "Price checked: %(date)s"
+msgstr "দাম যাচাই: %(date)s"
 
 #, python-format
 msgid "What is %(name)s? Uses, side effects, warnings"
@@ -317,3 +317,9 @@ msgstr "সব দাম এখনো আমাদের কাছে নেই,
 
 msgid "%(count)s more brands"
 msgstr "আরও %(count)sটি ব্র্যান্ড"
+
+msgid "%(count)s registered medicines · %(makers)s companies"
+msgstr "%(count)sটি নিবন্ধিত ওষুধ · %(makers)sটি কোম্পানি"
+
+msgid "Cheapest"
+msgstr "সবচেয়ে কম দাম"

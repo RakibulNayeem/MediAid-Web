@@ -40,4 +40,10 @@ def home(request):
         .select_related("generic", "dosage_form")
         .order_by("-view_count", F("is_popular").desc(), "brand_name")[:COMMON_COUNT]
     )
-    return render(request, "core/home.html", {"save_money": _save_money_cards(), "common": common})
+    real_medicines = Medicine.objects.filter(is_active=True, is_sample=False)
+    return render(request, "core/home.html", {
+        "save_money": _save_money_cards(),
+        "common": common,
+        "medicine_count": f"{count:,}" if (count := real_medicines.count()) else "",
+        "maker_count": real_medicines.values("manufacturer").distinct().count(),
+    })

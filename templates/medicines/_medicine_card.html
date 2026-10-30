@@ -1,7 +1,8 @@
 {% load i18n mediaid %}<a class="card medicine-card" href="{{ medicine.get_absolute_url }}">
+  <span class="card-icon"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="m10.5 20.5-7-7a4.95 4.95 0 0 1 7-7l7 7a4.95 4.95 0 0 1-7 7ZM7 10l7 7"/></svg></span>
   <span class="card-main">
     <strong class="card-title">{{ medicine|localized:"brand_name" }} <span class="muted">{{ medicine.strength|num }}</span></strong>
-    <span class="muted">{{ medicine.dosage_form|localized }} · {{ medicine.generic|localized }}</span>
+    <span class="muted small">{{ medicine.dosage_form|localized }} · {{ medicine.generic|localized }}</span>
     <span class="muted small">{{ medicine.manufacturer|localized }}</span>
     {% if medicine.is_sample %}<span class="badge badge-sample">{% translate "Sample" %}</span>{% endif %}
   </span>

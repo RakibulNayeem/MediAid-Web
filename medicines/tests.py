@@ -11,6 +11,7 @@ from django.urls import reverse
 
 from .importer import import_generics, import_medicines
 from .management.commands.convert_dgda import OUTPUT_COLUMNS, convert_rows
+from .management.commands.fetch_dgda_prices import choose_price, parse_price_page
 from .models import DosageForm, Generic, Manufacturer, Medicine
 from .search import matching_generics, search_medicines
 from .text import bangla_to_latin, normalize, normalize_strength, sound_key
@@ -130,6 +131,37 @@ class SearchTests(TestCase):
         self.assertEqual(Medicine.objects.count(), 3)
 
 
+class SuggestTests(TestCase):
+    @classmethod
+    def setUpTestData(cls):
+        cls.napa = make_medicine("Napa", brand_name_bn="নাপা")
+        make_medicine("Seclo", Generic.objects.create(name="Omeprazole"), strength="20 mg", form="Capsule")
+
+    def suggest(self, query):
+        return self.client.get(reverse("medicines:suggest"), {"q": query}).json()["results"]
+
+    def test_english_bangla_and_other_spellings(self):
+        for query in ["nap", "নাপা", "paracitamol"]:
+            with self.subTest(query):
+                self.assertIn(self.napa.get_absolute_url(), [r["url"] for r in self.suggest(query)])
+
+    def test_generic_is_suggested_with_its_page(self):
+        results = self.suggest("paracetamol")
+        self.assertEqual(results[0]["url"], self.napa.generic.get_absolute_url())
+
+    def test_too_short_or_unknown_gives_nothing(self):
+        self.assertEqual(self.suggest("n"), [])
+        self.assertEqual(self.suggest("qwxyz"), [])
+
+    def test_never_more_than_eight(self):
+        for i in range(12):
+            make_medicine(f"Napa{i:02}", maker=f"Maker{i}")
+        self.assertEqual(len(self.suggest("napa")), 8)
+
+    def test_home_page_search_box_is_wired_up(self):
+        self.assertContains(self.client.get("/"), 'data-suggest-url="/medicines/suggest/"')
+
+
 class AlternativesTests(TestCase):
     def setUp(self):
         self.napa = make_medicine("Napa", price="2.00", maker="A")
@@ -147,6 +179,14 @@ class AlternativesTests(TestCase):
         self.assertEqual(response.context["best_saving"], Decimal("1.00"))
         savings = {row["medicine"].brand_name: row["saving"] for row in response.context["alternatives"]}
         self.assertEqual(savings, {"Xpa": Decimal("1.00"), "Ace": Decimal("0.50"), "Napa": None, "NoPrice": None})
+
+    def test_cheapest_is_marked_and_bars_compare_same_unit_only(self):
+        make_medicine("Pack", price="0.50", unit="10 tablets", maker="G")
+        rows = {r["medicine"].brand_name: r for r in self.client.get(self.napa.get_absolute_url()).context["alternatives"]}
+        self.assertTrue(rows["Xpa"]["is_cheapest"])
+        self.assertNotIn("is_cheapest", rows["Pack"])
+        self.assertEqual((rows["Napa"]["bar"], rows["Xpa"]["bar"]), (100, 50))
+        self.assertNotIn("bar", rows["NoPrice"])
 
     def test_cheapest_has_no_saving(self):
         response = self.client.get(self.xpa.get_absolute_url())
@@ -371,6 +411,38 @@ class DgdaConvertTests(TestCase):
         result = import_medicines(buffer.getvalue())
         self.assertTrue(result.ok, result.errors)
         self.assertEqual(result.created, 2)
+
+
+class DgdaPriceTests(TestCase):
+    PAGE = """<table><tr><th>SL</th><th>Pack Size</th><th>Unit Price</th></tr>
+        <tr><td>1</td><td>10 x 10 in Blister Pack</td><td>4.01 TK</td></tr>
+        <tr><td>2</td><td>5 x 10 in Blister Pack</td><td>1,200.50 TK</td></tr></table>"""
+
+    def test_reads_the_price_table(self):
+        self.assertEqual(parse_price_page(self.PAGE), [("10 x 10 in Blister Pack", "4.01"), ("5 x 10 in Blister Pack", "1200.50")])
+
+    def test_empty_table_has_no_rows_but_another_page_is_an_error(self):
+        self.assertEqual(parse_price_page("<th>Unit Price</th>"), [])
+        with self.assertRaises(ValueError):
+            parse_price_page("<h1>Server busy</h1>")
+
+    def test_tablet_price_is_per_tablet(self):
+        self.assertEqual(choose_price([("10 x 10 in Blister Pack", "4.01")], "Tablet"), (Decimal("4.01"), "1 tablet"))
+        self.assertEqual(choose_price([("1 x 10 in Blister Pack", "3.45")], "Soft Gelatin Capsule"), (Decimal("3.45"), "1 capsule"))
+
+    def test_bottle_uses_its_smallest_size(self):
+        rows = [("100 ml in Bottle", "65.45"), ("60 ml in Bottle", "49.73")]
+        self.assertEqual(choose_price(rows, "Suspension"), (Decimal("49.73"), "60 ml"))
+
+    def test_other_packs_only_compare_with_the_same_pack(self):
+        self.assertEqual(choose_price([("1 x 1 Vial With Water", "50")], "Injection"), (Decimal("50"), "1 x 1 vial with water"))
+
+    def test_zero_or_missing_price_is_no_price(self):
+        self.assertIsNone(choose_price([("10 in Blister Pack", "0")], "Tablet"))
+        self.assertIsNone(choose_price([], "Tablet"))
+
+    def test_sizes_are_written_plainly(self):
+        self.assertEqual(choose_price([("100 ml in Bottle", "5")], "Syrup")[1], "100 ml")
 
 
 class AdminImportTests(TestCase):

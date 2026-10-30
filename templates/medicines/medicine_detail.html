@@ -5,70 +5,74 @@
 <nav class="breadcrumb" aria-label="{% translate "Browse" %}"><a href="{% url 'medicines:generic_list' %}">{% translate "Generics" %}</a><span aria-hidden="true">›</span><a href="{{ medicine.generic.get_absolute_url }}">{{ medicine.generic|localized }}</a></nav>
 {% if medicine.is_sample %}{% include "medicines/_sample_notice.html" %}{% endif %}
 
-<section class="section">
-  <div class="med-head">
-    <div>
-      <h1>{{ medicine|localized:"brand_name" }} <span class="muted">{{ medicine.strength|num }}</span></h1>
-      <p class="muted">{{ medicine.dosage_form|localized }} · {{ medicine.generic|localized }}</p>
-    </div>
-    <div class="med-price">
+<div class="med-layout">
+  <section class="med-hero">
+    <h1>{{ medicine|localized:"brand_name" }} <span class="muted">{{ medicine.strength|num }}</span></h1>
+    <p class="med-sub">{{ medicine.dosage_form|localized }} · {{ medicine.generic|localized }}</p>
+
+    <div class="med-price-panel">
       {% if medicine.price is not None %}
         <strong class="price">{{ medicine.price|taka }}</strong>
-        {% if medicine.price_unit %}<span class="muted small">{{ medicine.price_unit|num }}</span>{% endif %}
-        {% if medicine.price_updated_on %}<span class="muted small">{% blocktranslate with date=medicine.price_updated_on|date:"Y-m-d"|num %}Price updated: {{ date }}{% endblocktranslate %}</span>{% endif %}
+        {% if medicine.price_unit %}<span class="muted">/ {{ medicine.price_unit|num }}</span>{% endif %}
+        {% if medicine.price_updated_on %}<span class="muted small price-checked">{% blocktranslate with date=medicine.price_updated_on|date:"Y-m-d"|num %}Price checked: {{ date }}{% endblocktranslate %}</span>{% endif %}
       {% else %}
         <span class="muted">{% translate "Price not available" %}</span>
       {% endif %}
     </div>
-  </div>
-  <dl class="facts">
-    <div class="fact"><dt>{% translate "Generic" %}</dt><dd><a href="{{ medicine.generic.get_absolute_url }}">{{ medicine.generic|localized }}</a></dd></div>
-    <div class="fact"><dt>{% translate "Strength" %}</dt><dd>{{ medicine.strength|num }}</dd></div>
-    <div class="fact"><dt>{% translate "Form" %}</dt><dd>{{ medicine.dosage_form|localized }}</dd></div>
-    <div class="fact"><dt>{% translate "Manufacturer" %}</dt><dd><a href="{{ medicine.manufacturer.get_absolute_url }}">{{ medicine.manufacturer|localized }}</a></dd></div>
-  </dl>
-  <a class="button-secondary" href="{{ medicine.generic.get_absolute_url }}">{% blocktranslate with name=medicine.generic|localized %}What is {{ name }}? Uses, side effects, warnings{% endblocktranslate %}</a>
-</section>
 
-<section class="section" id="alternatives">
-  <h2>{% translate "Cheaper alternatives" %}</h2>
-  {% if best_saving %}
-    <p class="save-summary">{% blocktranslate with amount=best_saving|taka %}You could save up to {{ amount }}{% endblocktranslate %}{% if medicine.price_unit %} / {{ medicine.price_unit|num }}{% endif %}</p>
-  {% elif any_price_missing %}
-    <p class="muted">{% translate "We don't have all the prices yet, so we can't say which is cheapest. Other brands with the same generic, strength and form:" %}</p>
-  {% elif alternatives|length > 1 %}
-    <p class="muted">{% translate "No cheaper brand found. Other brands with the same generic, strength and form:" %}</p>
-  {% else %}
-    <p class="muted">{% translate "No other brand with the same generic, strength and form is listed yet." %}</p>
-  {% endif %}
+    <dl class="spec-grid">
+      <div class="spec"><dt>{% translate "Generic" %}</dt><dd><a href="{{ medicine.generic.get_absolute_url }}">{{ medicine.generic|localized }}</a></dd></div>
+      <div class="spec"><dt>{% translate "Strength" %}</dt><dd>{{ medicine.strength|num }}</dd></div>
+      <div class="spec"><dt>{% translate "Form" %}</dt><dd>{{ medicine.dosage_form|localized }}</dd></div>
+      <div class="spec"><dt>{% translate "Manufacturer" %}</dt><dd><a href="{{ medicine.manufacturer.get_absolute_url }}">{{ medicine.manufacturer|localized }}</a></dd></div>
+    </dl>
 
-  {% if alternatives|length > 1 %}
-  <ul class="alt-list">
-    {% for alt in alternatives %}
-    <li class="alt{% if alt.is_current %} alt-current{% endif %}">
-      <a href="{{ alt.medicine.get_absolute_url }}">
-        <span class="card-main">
-          <strong>{{ alt.medicine|localized:"brand_name" }}</strong>
-          {% if alt.is_current %}<span class="badge">{% translate "This medicine" %}</span>{% endif %}
-          <span class="muted small">{{ alt.medicine.manufacturer|localized }}</span>
-        </span>
-        <span class="card-price">
-          {% if alt.medicine.price is not None %}
-            <strong>{{ alt.medicine.price|taka }}</strong>
-            {% if alt.medicine.price_unit %}<span class="muted small">{{ alt.medicine.price_unit|num }}</span>{% endif %}
-          {% else %}
-            <span class="muted small">{% translate "Price not available" %}</span>
-          {% endif %}
-          {% if alt.saving %}<span class="badge badge-save">{% blocktranslate with amount=alt.saving|taka percent=alt.percent|num %}Save {{ amount }} ({{ percent }}%){% endblocktranslate %}</span>{% endif %}
-        </span>
-      </a>
-    </li>
-    {% endfor %}
-  </ul>
-  {% if more_alternatives %}<p><a href="{{ medicine.generic.get_absolute_url }}">{% blocktranslate with count=more_alternatives|num %}{{ count }} more brands{% endblocktranslate %}</a></p>{% endif %}
-  <p class="muted small">{% translate "Same generic, strength and form. Ask your doctor or pharmacist before switching brands." %}</p>
-  {% endif %}
-</section>
+    <a class="button-wide" href="{{ medicine.generic.get_absolute_url }}">{% blocktranslate with name=medicine.generic|localized %}What is {{ name }}? Uses, side effects, warnings{% endblocktranslate %}<svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="m9 5 7 7-7 7"/></svg></a>
+  </section>
+
+  <section class="section" id="alternatives">
+    <h2>{% translate "Cheaper alternatives" %}</h2>
+    {% if best_saving %}
+      <p class="save-summary"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="m5 13 4 4L19 7"/></svg><span>{% blocktranslate with amount=best_saving|taka %}You could save up to {{ amount }}{% endblocktranslate %}{% if medicine.price_unit %} / {{ medicine.price_unit|num }}{% endif %}</span></p>
+    {% elif any_price_missing %}
+      <p class="muted section-note">{% translate "We don't have all the prices yet, so we can't say which is cheapest. Other brands with the same generic, strength and form:" %}</p>
+    {% elif alternatives|length > 1 %}
+      <p class="muted section-note">{% translate "No cheaper brand found. Other brands with the same generic, strength and form:" %}</p>
+    {% else %}
+      <p class="muted section-note">{% translate "No other brand with the same generic, strength and form is listed yet." %}</p>
+    {% endif %}
+
+    {% if alternatives|length > 1 %}
+    <ul class="alt-list">
+      {% for alt in alternatives %}
+      <li class="alt{% if alt.is_current %} alt-current{% endif %}{% if alt.is_cheapest %} alt-cheapest{% endif %}">
+        <a href="{{ alt.medicine.get_absolute_url }}">
+          <span class="alt-row">
+            <span class="card-main">
+              <span class="alt-name"><strong>{{ alt.medicine|localized:"brand_name" }}</strong>
+                {% if alt.is_current %}<span class="badge">{% translate "This medicine" %}</span>{% elif alt.is_cheapest %}<span class="badge badge-save">{% translate "Cheapest" %}</span>{% endif %}</span>
+              <span class="muted small">{{ alt.medicine.manufacturer|localized }}</span>
+            </span>
+            <span class="card-price">
+              {% if alt.medicine.price is not None %}
+                <strong>{{ alt.medicine.price|taka }}</strong>
+                {% if alt.medicine.price_unit %}<span class="muted small">{{ alt.medicine.price_unit|num }}</span>{% endif %}
+              {% else %}
+                <span class="muted small">{% translate "Price not available" %}</span>
+              {% endif %}
+              {% if alt.saving %}<span class="badge badge-save">{% blocktranslate with amount=alt.saving|taka percent=alt.percent|num %}Save {{ amount }} ({{ percent }}%){% endblocktranslate %}</span>{% endif %}
+            </span>
+          </span>
+          {% if alt.bar %}<span class="price-bar" style="display:block" aria-hidden="true"><span style="width: {{ alt.bar }}%"></span></span>{% endif %}
+        </a>
+      </li>
+      {% endfor %}
+    </ul>
+    {% if more_alternatives %}<p><a href="{{ medicine.generic.get_absolute_url }}">{% blocktranslate with count=more_alternatives|num %}{{ count }} more brands{% endblocktranslate %}</a></p>{% endif %}
+    <p class="muted small">{% translate "Same generic, strength and form. Ask your doctor or pharmacist before switching brands." %}</p>
+    {% endif %}
+  </section>
+</div>
 
 {% include "medicines/_disclaimer.html" %}
 {% endblock %}
