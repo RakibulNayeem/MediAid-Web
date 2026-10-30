@@ -34,7 +34,7 @@ A Bangla-first health platform for Bangladesh: medicine information first, emerg
 - **`is_sample`** marks test data. Pages show a warning on these rows. Sample prices are invented and the text is unverified, so sample data must not go live as if real. `seed_sample` needs `--force` when `DEBUG` is off.
 
 ## Accounts and leaderboard
-- **Accounts:** django-allauth at `/accounts/`, email plus optional Google, verified by 6-digit code. Off on the live site until `EMAIL_HOST_USER` and `EMAIL_HOST_PASSWORD` are set (`ACCOUNTS_ENABLED`).
+- **Accounts:** django-allauth at `/accounts/`, email plus Google (button appears only when `GOOGLE_CLIENT_ID` and `GOOGLE_CLIENT_SECRET` are set; Google logs in to the account with the same verified email), verified by 6-digit code. Off on the live site until `EMAIL_HOST_USER` and `EMAIL_HOST_PASSWORD` are set (`ACCOUNTS_ENABLED`).
 - **Leaderboard:** `Medicine.search_count` and `view_count`, totals only, grouped by brand. Bots are not counted, and nothing records who searched.
 - **Prescriptions (not built):** never send real prescriptions to the free Gemini tier. Google says not to submit personal data there and reviewers may read it. Real uploads need a billed project; test with made-up prescriptions. The photo is deleted after the final check.
 - **Git:** old `main` commits still track `db.sqlite3`, so switching to them overwrites the ignored local database.
