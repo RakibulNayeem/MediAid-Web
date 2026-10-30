@@ -1,13 +1,13 @@
 from django.core.paginator import Paginator
 from django.http import JsonResponse
-from django.db.models import Count, F, Max, Q, Sum
-from django.db.models.functions import Lower
+from django.db.models import Count, F, Q
 from django.shortcuts import get_object_or_404, render
 from django.utils.translation import gettext as _
 
 from core.templatetags.mediaid import dual, localized, num
 
 from .models import DrugClass, Generic, Manufacturer, Medicine, saving_percent
+from .rankings import most_searched
 from .search import matching_generics, search_medicines
 
 MAX_SUGGESTIONS = 8
@@ -119,15 +119,7 @@ def medicine_detail(request, slug):
 
 
 def leaderboard(request):
-    # All strengths and forms of a brand count together, so Napa appears once.
-    most_searched = (
-        Medicine.objects.filter(Q(search_count__gt=0) | Q(view_count__gt=0), is_active=True)
-        .annotate(key=Lower("brand_name"))
-        .values("key")
-        .annotate(total=Sum("search_count") + Sum("view_count"), brand=Max("brand_name"), brand_bn=Max("brand_name_bn"))
-        .order_by("-total", "key")[:LEADERBOARD_SIZE]
-    )
-    return render(request, "medicines/leaderboard.html", {"most_searched": most_searched})
+    return render(request, "medicines/leaderboard.html", {"most_searched": most_searched(LEADERBOARD_SIZE)})
 
 
 def generic_list(request):

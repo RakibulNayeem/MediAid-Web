@@ -7,15 +7,7 @@
 
   <h2>{% translate "Most searched medicines" %}</h2>
   {% if most_searched %}
-  <ol class="rank-list">
-    {% for row in most_searched %}
-    <li><a class="card" href="{% url 'medicines:search' %}?q={{ row.brand|urlencode }}">
-      <span class="rank-number">{{ forloop.counter|num }}</span>
-      <strong class="card-main">{% if row.brand_bn and row.brand_bn != row.brand %}{% if LANGUAGE_CODE == "bn" %}{{ row.brand_bn }} ({{ row.brand }}){% else %}{{ row.brand }}{% endif %}{% else %}{{ row.brand }}{% endif %}</strong>
-      <span class="muted small">{% blocktranslate with count=row.total|num %}{{ count }} searches{% endblocktranslate %}</span>
-    </a></li>
-    {% endfor %}
-  </ol>
+  {% include "medicines/_rank_list.html" with rows=most_searched %}
   {% else %}
   <p class="muted">{% translate "Not enough searches yet." %}</p>
   {% endif %}
