@@ -257,7 +257,7 @@ class PageTests(TestCase):
         self.assertContains(response, "1 tablet")
         self.assertNotContains(response, "নাপা")
         self.assertNotContains(response, "৫০০ mg")
-        self.assertNotContains(self.client.get(medicine.generic.get_absolute_url()), "প্যারাসিটামল")
+        self.assertContains(self.client.get(medicine.generic.get_absolute_url()), "<h1>Paracetamol</h1>")
         suggestion = self.client.get(reverse("medicines:suggest"), {"q": "নাপা"}).json()["results"][0]
         self.assertEqual(suggestion["title"], "Napa 500 mg")
 
