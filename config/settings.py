@@ -10,7 +10,6 @@ from pathlib import Path
 
 import dj_database_url
 from django.core.exceptions import ImproperlyConfigured
-from django.utils.translation import gettext_lazy as _
 from dotenv import load_dotenv
 
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -110,7 +109,7 @@ AUTH_PASSWORD_VALIDATORS = [
 # The toggle in the header stores the choice in the "django_language" cookie.
 # Translations: locale/bn/LC_MESSAGES/django.po -> run `python manage.py compile_po` after editing.
 LANGUAGE_CODE = "bn"
-LANGUAGES = [("bn", _("Bangla")), ("en", _("English"))]
+LANGUAGES = [("bn", "বাংলা"), ("en", "English")]  # plain text: Vercel reads this file before Django has started
 LOCALE_PATHS = [BASE_DIR / "locale"]
 LANGUAGE_COOKIE_AGE = 60 * 60 * 24 * 365
 TIME_ZONE = "Asia/Dhaka"
