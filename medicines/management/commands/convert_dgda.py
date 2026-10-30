@@ -50,10 +50,13 @@ def convert_rows(rows):
         if registration in registrations:
             registration = ""
         registrations.add(registration)
-        converted.append({
+        item = {
             "brand_name": brand, "generic": generic, "strength": strength, "dosage_form": form,
             "manufacturer": maker, "dgda_registration_no": registration,
-        })
+        }
+        if row.get("link"):
+            item["dgda_link"] = row["link"]  # the price page, used by fetch_dgda_prices
+        converted.append(item)
     return converted, skipped
 
 

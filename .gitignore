@@ -14,3 +14,4 @@ staticfiles/
 .claude/
 .agents/
 skills-lock.json
+data/
