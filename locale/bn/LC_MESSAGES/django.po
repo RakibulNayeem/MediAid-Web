@@ -197,7 +197,7 @@ msgstr "নমুনা তথ্য।"
 msgid "This entry is for testing. Its details and price are not verified, so do not rely on them."
 msgstr "এটি পরীক্ষার জন্য। এর তথ্য ও দাম যাচাই করা হয়নি, তাই এর ওপর নির্ভর করবেন না।"
 
-msgid "Type a medicine name - brand or generic"
+msgid "Brand or generic name"
 msgstr "ওষুধের নাম লিখুন — ব্র্যান্ড বা জেনেরিক"
 
 msgid "Search"

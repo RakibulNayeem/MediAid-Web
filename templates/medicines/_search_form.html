@@ -1,4 +1,4 @@
 {% load i18n %}<form class="search-form" action="{% url 'medicines:search' %}" method="get" role="search">
-  <input type="search" name="q" value="{{ query|default:'' }}" maxlength="100" placeholder="{% translate "Type a medicine name - brand or generic" %}" aria-label="{% translate "Search medicines" %}" autocomplete="off" {% if autofocus %}autofocus{% endif %}>
+  <input type="search" name="q" value="{{ query|default:'' }}" maxlength="100" placeholder="{% translate "Brand or generic name" %}" aria-label="{% translate "Search medicines" %}" autocomplete="off" {% if autofocus %}autofocus{% endif %}>
   <button type="submit">{% translate "Search" %}</button>
 </form>

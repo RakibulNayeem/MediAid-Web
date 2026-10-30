@@ -154,7 +154,7 @@ class PageTests(TestCase):
 
     def test_english_toggle(self):
         response = self.client.post(reverse("set_language"), {"language": "en", "next": "/"}, follow=True)
-        self.assertContains(response, "Type a medicine name")
+        self.assertContains(response, "Brand or generic name")
         self.assertContains(response, "বাংলা")
 
     def test_medicine_page_has_disclaimer_and_sample_notice(self):
