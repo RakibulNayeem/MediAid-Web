@@ -105,6 +105,7 @@ class Medicine(models.Model):
     is_popular = models.BooleanField(_("show on home page"), default=False)
     is_sample = models.BooleanField(_("sample data"), default=False, help_text=_("Test data, not from an official source."))
     view_count = models.PositiveIntegerField(default=0, editable=False)
+    search_count = models.PositiveIntegerField(default=0, editable=False)
 
     slug = models.SlugField(max_length=255, unique=True, blank=True)
     # Filled in automatically. They make comparing and searching fast.

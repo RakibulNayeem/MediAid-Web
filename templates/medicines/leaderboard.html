@@ -1,0 +1,29 @@
+{% extends "base.html" %}{% load i18n mediaid %}
+{% block title %}{% translate "Leaderboard" %} | {% translate "MediAid" %}{% endblock %}
+{% block content %}
+<section class="section">
+  <h1>{% translate "Leaderboard" %}</h1>
+  <p class="muted section-note">{% translate "Popular does not mean right for you. Only take a medicine your doctor or pharmacist has advised." %}</p>
+
+  <h2>{% translate "Most searched medicines" %}</h2>
+  {% if most_searched %}
+  <ol class="rank-list">
+    {% for row in most_searched %}
+    <li><a class="card" href="{% url 'medicines:search' %}?q={{ row.brand|urlencode }}">
+      <span class="rank-number">{{ forloop.counter|num }}</span>
+      <strong class="card-main">{% if row.brand_bn and row.brand_bn != row.brand %}{% if LANGUAGE_CODE == "bn" %}{{ row.brand_bn }} ({{ row.brand }}){% else %}{{ row.brand }}{% endif %}{% else %}{{ row.brand }}{% endif %}</strong>
+      <span class="muted small">{% blocktranslate with count=row.total|num %}{{ count }} searches{% endblocktranslate %}</span>
+    </a></li>
+    {% endfor %}
+  </ol>
+  {% else %}
+  <p class="muted">{% translate "Not enough searches yet." %}</p>
+  {% endif %}
+</section>
+
+<section class="section">
+  <h2>{% translate "Most prescribed medicines" %}</h2>
+  <p class="muted">{% translate "Coming soon, counted anonymously from confirmed prescriptions." %}</p>
+</section>
+{% include "medicines/_disclaimer.html" %}
+{% endblock %}

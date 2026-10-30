@@ -7,6 +7,7 @@ app_name = "medicines"
 urlpatterns = [
     path("search/", views.search, name="search"),
     path("suggest/", views.suggest, name="suggest"),
+    path("leaderboard/", views.leaderboard, name="leaderboard"),
     path("generics/", views.generic_list, name="generic_list"),
     path("generics/<slug:slug>/", views.generic_detail, name="generic_detail"),
     path("manufacturers/", views.manufacturer_list, name="manufacturer_list"),

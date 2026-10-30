@@ -1,6 +1,7 @@
 from django.core.paginator import Paginator
 from django.http import JsonResponse
-from django.db.models import Count, F, Q
+from django.db.models import Count, F, Max, Q, Sum
+from django.db.models.functions import Lower
 from django.shortcuts import get_object_or_404, render
 from django.utils.translation import gettext as _
 
@@ -13,6 +14,8 @@ MAX_SUGGESTIONS = 8
 MAX_GENERIC_SUGGESTIONS = 2
 
 PAGE_SIZE = 20
+LEADERBOARD_SIZE = 20
+SEARCH_ENGINE_WORDS = ("bot", "crawl", "spider", "slurp", "preview")
 MAX_ALTERNATIVES = 30  # common generics have over 100 brands
 _ACTIVE_COUNT = Count("medicines", filter=Q(medicines__is_active=True))
 
@@ -21,9 +24,24 @@ def _page(request, items):
     return Paginator(items, PAGE_SIZE).get_page(request.GET.get("page"))
 
 
+def _is_a_person(request):
+    agent = request.headers.get("user-agent", "").lower()
+    return bool(agent) and not any(word in agent for word in SEARCH_ENGINE_WORDS)
+
+
+def _count_search(request, results, was_fuzzy):
+    """Counts the medicine someone searched for by name. Only totals are stored, never who searched."""
+    if was_fuzzy or request.GET.get("page", "1") != "1" or not _is_a_person(request):
+        return
+    top = results.first()
+    if top is not None and getattr(top, "rank", None) in (0, 1):  # the search matched its brand name
+        Medicine.objects.filter(pk=top.pk).update(search_count=F("search_count") + 1)
+
+
 def search(request):
     query = request.GET.get("q", "").strip()
     results, was_fuzzy = search_medicines(query)
+    _count_search(request, results, was_fuzzy)
     return render(request, "medicines/search.html", {
         "query": query,
         "autofocus": not query,  # arriving from the header's search icon: ready to type
@@ -73,8 +91,9 @@ def medicine_detail(request, slug):
     medicine = get_object_or_404(
         Medicine.objects.select_related("generic__drug_class", "manufacturer", "dosage_form"), slug=slug, is_active=True,
     )
-    # Powers "commonly searched" on the home page. F() avoids losing counts when two people open it at once.
-    Medicine.objects.filter(pk=medicine.pk).update(view_count=F("view_count") + 1)
+    # Powers "commonly searched" and the leaderboard. F() avoids losing counts when two people open it at once.
+    if _is_a_person(request):
+        Medicine.objects.filter(pk=medicine.pk).update(view_count=F("view_count") + 1)
 
     alternatives = []
     best_saving = None
@@ -97,6 +116,18 @@ def medicine_detail(request, slug):
         "more_alternatives": max(all_alternatives.count() - MAX_ALTERNATIVES, 0),
         "any_price_missing": any(row["medicine"].price is None for row in alternatives),
     })
+
+
+def leaderboard(request):
+    # All strengths and forms of a brand count together, so Napa appears once.
+    most_searched = (
+        Medicine.objects.filter(Q(search_count__gt=0) | Q(view_count__gt=0), is_active=True)
+        .annotate(key=Lower("brand_name"))
+        .values("key")
+        .annotate(total=Sum("search_count") + Sum("view_count"), brand=Max("brand_name"), brand_bn=Max("brand_name_bn"))
+        .order_by("-total", "key")[:LEADERBOARD_SIZE]
+    )
+    return render(request, "medicines/leaderboard.html", {"most_searched": most_searched})
 
 
 def generic_list(request):
