@@ -421,6 +421,12 @@ class DgdaPriceTests(TestCase):
     def test_reads_the_price_table(self):
         self.assertEqual(parse_price_page(self.PAGE), [("10 x 10 in Blister Pack", "4.01"), ("5 x 10 in Blister Pack", "1200.50")])
 
+    def test_price_without_a_leading_zero(self):
+        page = "<th>Unit Price</th><td>1</td><td>50 x 10 in Blister Pack</td><td>.8 TK</td>"
+        rows = parse_price_page(page)
+        self.assertEqual(rows, [("50 x 10 in Blister Pack", ".8")])
+        self.assertEqual(choose_price(rows, "Tablet"), (Decimal("0.8"), "1 tablet"))
+
     def test_empty_table_has_no_rows_but_another_page_is_an_error(self):
         self.assertEqual(parse_price_page("<th>Unit Price</th>"), [])
         with self.assertRaises(ValueError):

@@ -32,7 +32,7 @@ PAGE_SIZE = 500
 MAX_FAILURES_IN_A_ROW = 5
 PRICE_COLUMNS = OUTPUT_COLUMNS + ["price", "price_unit", "price_updated_on"]
 AMOUNT_PACK = re.compile(r"^\s*(\d+(?:\.\d+)?)\s*(ml|gm|mg|g|l)\b", re.IGNORECASE)
-PRICE = re.compile(r"(\d[\d,]*(?:\.\d+)?)")
+PRICE = re.compile(r"(\d[\d,]*(?:\.\d+)?|\.\d+)")  # DGDA writes 80 paisa as ".8 TK"
 
 
 def parse_price_page(page):
