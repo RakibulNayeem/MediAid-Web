@@ -57,3 +57,23 @@ def bangla_to_latin(text):
             out.append(ch)
         i += 1
     return "".join(out)
+
+
+_SOUND_SWAPS = [("ph", "f"), ("ck", "k"), ("x", "ks"), ("q", "k"), ("v", "b"), ("z", "j"), ("w", "")]
+_SOFT_C = re.compile(r"c(?=[eiy])")
+
+
+def sound_key(word):
+    """A word's consonants, so different spellings of one sound match.
+
+    paracetamol, paracitamol and প্যারাসিটামল all become "prstml"; seclo and সেকলো become "skl".
+    """
+    word = bangla_to_latin(normalize(word))
+    word = _SOFT_C.sub("s", word).replace("c", "k")
+    for old, new in _SOUND_SWAPS:
+        word = word.replace(old, new)
+    word = re.sub(r"([bdgkt])h", r"\1", word)  # Bangla often spells t, d... with an extra h sound
+    word = re.sub(r"[^a-z0-9]", "", word)
+    word = re.sub(r"^[aeiouy]+", "a", word)  # a word's opening vowel sound is spelled many ways: o, a, অ্যা
+    word = word[:1] + re.sub(r"[aeiouy]", "", word[1:])
+    return re.sub(r"(.)\1+", r"\1", word)  # "ll" counts as "l"

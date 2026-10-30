@@ -28,11 +28,11 @@ MAX_ERRORS_SHOWN = 50
 BATCH_SIZE = 500
 UPDATE_FIELDS = [
     "brand_name", "brand_name_bn", "generic_id", "strength", "dosage_form_id", "manufacturer_id", "price", "price_unit",
-    "price_updated_on", "dgda_registration_no", "is_sample", "strength_key", "search_text",
+    "price_updated_on", "dgda_registration_no", "is_sample", "strength_key", "search_text", "sound_text",
 ]
 MAX_LENGTHS = {
-    "brand_name": 200, "brand_name_bn": 200, "generic": 200, "generic_bn": 200, "dosage_form": 200, "dosage_form_bn": 200,
-    "manufacturer": 200, "manufacturer_bn": 200, "drug_class": 200, "drug_class_bn": 200, "strength": 100,
+    "brand_name": 200, "brand_name_bn": 200, "generic": 700, "generic_bn": 200, "dosage_form": 200, "dosage_form_bn": 200,
+    "manufacturer": 200, "manufacturer_bn": 200, "drug_class": 200, "drug_class_bn": 200, "strength": 300,
     "price_unit": 50, "dgda_registration_no": 100, "source": 300,
 }
 

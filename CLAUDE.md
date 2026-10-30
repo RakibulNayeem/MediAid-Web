@@ -8,7 +8,7 @@ A Bangla-first health platform for Bangladesh: medicine information first, emerg
 ## Working rules from the owner
 - Ask before every push. Merge into `main` only after approval.
 - Small, clear commits. After each step, say how to test it locally.
-- Never scrape or copy from medex.com.bd or other medicine sites. Data comes from DGDA lists and official leaflets, loaded through the CSV import.
+- Don't scrape or copy from medex.com.bd: its terms ban automated extraction without written consent. Data comes from DGDA lists and official leaflets, loaded through the CSV import.
 
 ## Layout
 - `config/`: settings and URLs. All secrets come from the environment.
@@ -21,8 +21,9 @@ A Bangla-first health platform for Bangladesh: medicine information first, emerg
 - **Search** (`medicines/search.py`) tries these in order:
   1. Each typed word must start a word in `Medicine.search_text`. That field is lower-case with a leading space. Use `contains`, never `icontains`, because `UPPER()` stops PostgreSQL using the trigram index.
   2. A Bangla query with no match is romanised (`bangla_to_latin`), because official lists only have English names.
-  3. Closest spelling with `TrigramWordSimilarity`, on PostgreSQL only.
-- **Local SQLite is allowed** when `DATABASE_URL` is empty. The trigram index migration (`0002`) and fuzzy search skip themselves there. Run tests on PostgreSQL as well when changing search.
+  3. Same sound (`sound_key`, stored in `sound_text`), so other spellings find the right medicine.
+  4. Closest spelling with `TrigramWordSimilarity`, on PostgreSQL only. These can be different medicines, so the page labels them.
+- **Local SQLite is allowed** when `DATABASE_URL` is empty. The trigram index migrations and fuzzy search skip themselves there. Run tests on PostgreSQL as well when changing search.
 - **Alternatives** are the same `generic` + `strength_key` + `dosage_form`. `strength_key` makes "500 mg" equal "500mg".
 - **Savings** only show when both brands have the same non-empty `price_unit`, so differently sized packs are never compared.
 - **Language:** Bangla unless the cookie says otherwise, ignoring the browser's language. Generic info text is in Bangla only; the English toggle translates the interface and says so on the page.
@@ -34,5 +35,6 @@ A Bangla-first health platform for Bangladesh: medicine information first, emerg
 - `python manage.py test`
 - `python manage.py seed_sample [--clear]`
 - `python manage.py import_csv medicines|generics FILE [--dry-run]`
+- `python manage.py convert_dgda DGDA_EXPORT.csv OUTPUT.csv` prepares DGDA's export for the import. The export has no prices or Bangla names.
 - `python manage.py makemessages -l bn --ignore=.venv --no-location --no-wrap`, then edit the `.po`, then `python manage.py compile_po`. Commit the `.mo` too.
 - Run migrations on Neon with the direct connection string before the code that needs them goes live.

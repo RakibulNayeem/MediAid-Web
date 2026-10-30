@@ -1,4 +1,5 @@
 from decimal import Decimal
+import csv
 from io import StringIO
 
 from django.contrib.auth import get_user_model
@@ -9,9 +10,10 @@ from django.test import TestCase
 from django.urls import reverse
 
 from .importer import import_generics, import_medicines
+from .management.commands.convert_dgda import OUTPUT_COLUMNS, convert_rows
 from .models import DosageForm, Generic, Manufacturer, Medicine
 from .search import matching_generics, search_medicines
-from .text import bangla_to_latin, normalize, normalize_strength
+from .text import bangla_to_latin, normalize, normalize_strength, sound_key
 
 
 def make_medicine(brand, generic=None, strength="500 mg", form="Tablet", maker="Maker", price="2.00", unit="1 tablet", **extra):
@@ -57,6 +59,11 @@ class SearchTests(TestCase):
         self.assertCountEqual(self.brands("paracetamol"), ["Napa", "Ace"])
         self.assertCountEqual(self.brands("প্যারাসিটামল"), ["Napa", "Ace"])
 
+    def test_bangla_generic_without_bangla_name(self):
+        make_medicine("Comet", Generic.objects.create(name="Metformin"), maker="Other")
+        self.assertEqual(self.brands("মেটফরমিন"), ["Comet"])
+        self.assertEqual([g.name for g in matching_generics("মেটফরমিন")], ["Metformin"])
+
     def test_brand_with_bangla_digits(self):
         self.assertEqual(self.brands("নাপা ৫০০"), ["Napa"])
 
@@ -64,8 +71,20 @@ class SearchTests(TestCase):
         make_medicine("Rupa", maker="Other")
         self.assertEqual(self.brands("রুপা"), ["Rupa"])
 
-    def test_bangla_query_finds_near_spelling_on_postgres_only(self):
-        self.assertEqual(self.brands("সেকলো"), ["Seclo"] if connection.vendor == "postgresql" else [])
+    def test_bangla_query_finds_near_spelling(self):
+        make_medicine("Cyclophos", Generic.objects.create(name="Cyclophosphamide"), maker="Other")
+        self.assertEqual(self.brands("সেকলো"), ["Seclo"])
+
+    def test_nonsense_finds_nothing(self):
+        self.assertEqual(self.brands("qwxyz"), [])
+
+    def test_plain_generic_listed_before_combinations(self):
+        Generic.objects.create(name="Caffeine + Paracetamol")
+        self.assertEqual(matching_generics("paracetamol")[0].name, "Paracetamol")
+
+    def test_opening_vowel_spellings_match(self):
+        make_medicine("Zimax", Generic.objects.create(name="Azithromycin"), maker="Other")
+        self.assertEqual(self.brands("অ্যাজিথ্রোমাইসিন"), ["Zimax"])
 
     def test_matches_start_of_word_not_middle(self):
         self.assertEqual(self.brands("ace"), ["Ace"])
@@ -83,13 +102,18 @@ class SearchTests(TestCase):
         Medicine.objects.filter(pk=self.ace.pk).update(is_active=False)
         self.assertEqual(self.brands("ace"), [])
 
-    def test_typo_found_on_postgres_only(self):
-        results, was_fuzzy = search_medicines("paracitamol")
-        if connection.vendor == "postgresql":
-            self.assertTrue(was_fuzzy)
-            self.assertCountEqual([m.brand_name for m in results], ["Napa", "Ace"])
-        else:
-            self.assertEqual(list(results), [])
+    def test_other_spellings_find_the_right_medicine_not_a_lookalike(self):
+        make_medicine("Parasitin", Generic.objects.create(name="Mebendazole"), maker="Other")
+        for query in ["paracitamol", "প্যারাসিটামোল"]:
+            with self.subTest(query):
+                results, was_fuzzy = search_medicines(query)
+                self.assertFalse(was_fuzzy)
+                self.assertCountEqual([m.brand_name for m in results], ["Napa", "Ace"])
+
+    def test_sound_keys(self):
+        self.assertEqual(sound_key("paracetamol"), sound_key("প্যারাসিটামল"))
+        self.assertEqual(sound_key("seclo"), sound_key("সেকলো"))
+        self.assertEqual(sound_key("metformin"), sound_key("মেটফরমিন"))
 
     def test_generic_shortcut(self):
         self.assertEqual([g.name for g in matching_generics("ওমিপ্রাজল")], ["Omeprazole"])
@@ -132,6 +156,18 @@ class AlternativesTests(TestCase):
         syrup_small = make_medicine("Small", form="Suspension", price="30", unit="60 ml bottle", maker="A")
         syrup_big = make_medicine("Big2", form="Suspension", price="50", unit="100 ml bottle", maker="B")
         self.assertIsNone(syrup_big.saving_against(syrup_small))
+
+    def test_missing_prices_are_not_called_no_cheaper_brand(self):
+        response = self.client.get(self.xpa.get_absolute_url())
+        self.assertContains(response, "সব দাম এখনো আমাদের কাছে নেই")
+        self.assertNotContains(response, "এর চেয়ে কম দামের ব্র্যান্ড পাওয়া যায়নি")
+
+    def test_long_alternative_lists_are_capped(self):
+        for i in range(35):
+            make_medicine(f"Extra{i:02}", maker=f"Maker{i}")
+        response = self.client.get(self.napa.get_absolute_url())
+        self.assertEqual(len(response.context["alternatives"]), 30)
+        self.assertEqual(response.context["more_alternatives"], 9)
 
     def test_unknown_unit_shows_no_saving(self):
         one = make_medicine("One", form="Drop", price="30", unit="", maker="A")
@@ -270,7 +306,7 @@ class ImportTests(TestCase):
             "bad date": HEADER + "A,B,1,T,M,1,,30/10/2026,\n",
             "duplicate row": HEADER + "A,B,1,T,M,1,,,\nA,B,1,T,M,2,,,\n",
             "duplicate registration": HEADER + "A,B,1,T,M,1,,,R\nC,B,1,T,M,2,,,R\n",
-            "too long": HEADER + "A,B," + "1" * 101 + ",T,M,1,,,\n",
+            "too long": HEADER + "A,B," + "1" * 301 + ",T,M,1,,,\n",
             "empty file": "",
         }
         for name, data in cases.items():
@@ -295,6 +331,46 @@ class ImportTests(TestCase):
         rows = "".join(f"Napa,Paracetamol,500 mg,Tablet,Maker {i},1,,,\n" for i in range(30))
         self.assertTrue(import_medicines(HEADER + rows).ok)
         self.assertEqual(Medicine.objects.values("slug").distinct().count(), 30)
+
+
+class DgdaConvertTests(TestCase):
+    def row(self, brand="Napa", generic="Paracetamol 500 mg", form="Tablet", maker="Beximco", dar="1"):
+        return {"Trade Name": brand, "Generic Name With Strength": generic, "Dosage Form": form, "Company": maker, "DAR No": dar}
+
+    def test_splits_generic_from_strength(self):
+        cases = {
+            "Paracetamol 500 mg": ("Paracetamol", "500 mg"),
+            "Clonazepam .5 mg": ("Clonazepam", ".5 mg"),
+            "Riboflavin + Vitamin B1 2 mg + 5 mg": ("Riboflavin + Vitamin B1", "2 mg + 5 mg"),
+            "Calcium + Vitamin D3 500 mg + 200 IU": ("Calcium + Vitamin D3", "500 mg + 200 IU"),
+            "Hypromellose .3 %": ("Hypromellose", ".3 %"),
+        }
+        for text, expected in cases.items():
+            with self.subTest(text):
+                rows, _ = convert_rows([self.row(generic=text)])
+                self.assertEqual((rows[0]["generic"], rows[0]["strength"]), expected)
+
+    def test_skips_what_should_not_be_listed(self):
+        rows, skipped = convert_rows([
+            self.row(form="Raw Materials"), self.row(form="Bolus"), self.row(brand="Acid (API)"),
+            self.row(brand=""), self.row(generic="Pantoprazole"), self.row(dar="2"), self.row(dar="3"),
+        ])
+        self.assertEqual(len(rows), 1)
+        self.assertEqual(skipped, {"missing details": 1, "no strength": 1, "not for people": 3, "duplicate": 1})
+
+    def test_shared_registration_number_is_kept_once(self):
+        rows, _ = convert_rows([self.row(dar="9"), self.row(brand="Ace", dar="9")])
+        self.assertEqual([r["dgda_registration_no"] for r in rows], ["9", ""])
+
+    def test_output_loads_through_the_importer(self):
+        rows, _ = convert_rows([self.row(), self.row(brand="Ace", dar="2")])
+        buffer = StringIO()
+        writer = csv.DictWriter(buffer, OUTPUT_COLUMNS)
+        writer.writeheader()
+        writer.writerows(rows)
+        result = import_medicines(buffer.getvalue())
+        self.assertTrue(result.ok, result.errors)
+        self.assertEqual(result.created, 2)
 
 
 class AdminImportTests(TestCase):

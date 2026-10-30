@@ -30,7 +30,7 @@ Then open:
 - http://127.0.0.1:8000/ for the site
 - http://127.0.0.1:8000/admin/ for the admin
 
-Spelling-mistake search ("paracitamol") only works on PostgreSQL, so it does nothing on local SQLite. Everything else works the same.
+Search works the same on SQLite and PostgreSQL, except "closest match" results, which only appear on PostgreSQL.
 
 ### Run the tests
 
@@ -40,7 +40,17 @@ python manage.py test
 
 ## Load real data
 
-Use official sources only: DGDA's registered drug lists and official product leaflets. Do not copy data from medex.com.bd or other medicine sites.
+Use official sources only: DGDA's registered drug lists and official product leaflets. Do not copy data from medex.com.bd or other medicine sites: MedEx's terms ban automated extraction without written consent.
+
+**DGDA's medicine list:** on dgda.gov.bd, open the Allopathic drug list, then Medicine Information, then **Export All to Excel (CSV)**. Then run:
+
+```bash
+python manage.py convert_dgda medicine_information_export.csv dgda_medicines.csv
+python manage.py import_csv medicines dgda_medicines.csv --dry-run
+python manage.py import_csv medicines dgda_medicines.csv
+```
+
+The converter separates each generic from its strength. It skips factory raw materials, some animal-only forms, rows with missing details and duplicates, and prints how many of each. DGDA's export has no prices, so "cheaper alternatives" can't show savings until prices are added.
 
 **Small files (under about 4 MB):** in the admin, open Medicines, then **Import CSV**. Leave "Check only" ticked first. If the check passes, untick it and upload again.
 

@@ -34,6 +34,8 @@
   <h2>{% translate "Cheaper alternatives" %}</h2>
   {% if best_saving %}
     <p class="save-summary">{% blocktranslate with amount=best_saving|taka %}You could save up to {{ amount }}{% endblocktranslate %}{% if medicine.price_unit %} / {{ medicine.price_unit|num }}{% endif %}</p>
+  {% elif any_price_missing %}
+    <p class="muted">{% translate "We don't have all the prices yet, so we can't say which is cheapest. Other brands with the same generic, strength and form:" %}</p>
   {% elif alternatives|length > 1 %}
     <p class="muted">{% translate "No cheaper brand found. Other brands with the same generic, strength and form:" %}</p>
   {% else %}
@@ -63,6 +65,7 @@
     </li>
     {% endfor %}
   </ul>
+  {% if more_alternatives %}<p><a href="{{ medicine.generic.get_absolute_url }}">{% blocktranslate with count=more_alternatives|num %}{{ count }} more brands{% endblocktranslate %}</a></p>{% endif %}
   <p class="muted small">{% translate "Same generic, strength and form. Ask your doctor or pharmacist before switching brands." %}</p>
   {% endif %}
 </section>

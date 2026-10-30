@@ -1,4 +1,4 @@
-from django.db.models import F
+from django.db.models import F, Q
 from django.shortcuts import render
 
 from medicines.models import Medicine, saving_percent
@@ -35,7 +35,8 @@ def _save_money_cards():
 
 def home(request):
     common = (
-        Medicine.objects.filter(is_active=True)
+        # Only medicines people really opened or you picked, not the first names in the alphabet.
+        Medicine.objects.filter(Q(view_count__gt=0) | Q(is_popular=True), is_active=True)
         .select_related("generic", "dosage_form")
         .order_by("-view_count", F("is_popular").desc(), "brand_name")[:COMMON_COUNT]
     )

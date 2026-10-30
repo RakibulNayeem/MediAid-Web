@@ -6,6 +6,7 @@ from .models import DrugClass, Generic, Manufacturer, Medicine, saving_percent
 from .search import matching_generics, search_medicines
 
 PAGE_SIZE = 20
+MAX_ALTERNATIVES = 30  # common generics have over 100 brands
 _ACTIVE_COUNT = Count("medicines", filter=Q(medicines__is_active=True))
 
 
@@ -34,7 +35,8 @@ def medicine_detail(request, slug):
 
     alternatives = []
     best_saving = None
-    for other in medicine.alternatives():
+    all_alternatives = medicine.alternatives()
+    for other in all_alternatives[:MAX_ALTERNATIVES]:
         saving = medicine.saving_against(other)
         alternatives.append({
             "medicine": other,
@@ -48,6 +50,8 @@ def medicine_detail(request, slug):
         "medicine": medicine,
         "alternatives": alternatives,
         "best_saving": best_saving,
+        "more_alternatives": max(all_alternatives.count() - MAX_ALTERNATIVES, 0),
+        "any_price_missing": any(row["medicine"].price is None for row in alternatives),
     })
 
 

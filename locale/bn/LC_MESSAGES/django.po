@@ -311,3 +311,9 @@ msgstr "বানান দেখে নিন, অথবা প্যাকে�
 
 msgid "Medicine information and cheaper alternatives, in one place"
 msgstr "ওষুধের তথ্য ও কম দামের বিকল্প, এক জায়গায়"
+
+msgid "We don't have all the prices yet, so we can't say which is cheapest. Other brands with the same generic, strength and form:"
+msgstr "সব দাম এখনো আমাদের কাছে নেই, তাই কোনটি সবচেয়ে সস্তা তা বলা যাচ্ছে না। একই জেনেরিক, শক্তি ও ধরনের অন্য ব্র্যান্ড:"
+
+msgid "%(count)s more brands"
+msgstr "আরও %(count)sটি ব্র্যান্ড"

@@ -5,7 +5,7 @@ from django.urls import reverse
 from django.utils.text import slugify
 from django.utils.translation import gettext_lazy as _
 
-from .text import normalize, normalize_strength
+from .text import normalize, normalize_strength, sound_key
 
 
 def unique_slug(model, text, pk=None):
@@ -41,7 +41,9 @@ def _refresh_search_text(medicines, **changed):
     for medicine in medicines:
         for name, value in changed.items():
             setattr(medicine, name, value)
-        Medicine.objects.filter(pk=medicine.pk).update(search_text=medicine.build_search_text())
+        Medicine.objects.filter(pk=medicine.pk).update(
+            search_text=medicine.build_search_text(), sound_text=medicine.build_sound_text(),
+        )
 
 
 class Manufacturer(SluggedModel):
@@ -68,6 +70,7 @@ class DosageForm(SluggedModel):
 class Generic(SluggedModel):
     """The active ingredient. One information page, shared by all brands of this generic."""
 
+    name = models.CharField(max_length=700, unique=True)  # combination vitamins have very long names
     drug_class = models.ForeignKey(DrugClass, null=True, blank=True, on_delete=models.SET_NULL, related_name="generics")
     uses = models.TextField(_("what it's for (Bangla)"), blank=True, help_text=_("One point per line."))
     how_to_take = models.TextField(_("how to take it (Bangla)"), blank=True, help_text=_("One point per line."))
@@ -89,7 +92,7 @@ class Medicine(models.Model):
     brand_name = models.CharField(max_length=200)
     brand_name_bn = models.CharField(_("Bangla brand name"), max_length=200, blank=True)
     generic = models.ForeignKey(Generic, on_delete=models.PROTECT, related_name="medicines")
-    strength = models.CharField(max_length=100, help_text=_("As printed, e.g. 500 mg"))
+    strength = models.CharField(max_length=300, help_text=_("As printed, e.g. 500 mg"))
     dosage_form = models.ForeignKey(DosageForm, on_delete=models.PROTECT, related_name="medicines")
     manufacturer = models.ForeignKey(Manufacturer, on_delete=models.PROTECT, related_name="medicines")
     price = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True, help_text=_("In taka, for the unit below."))
@@ -103,8 +106,9 @@ class Medicine(models.Model):
 
     slug = models.SlugField(max_length=255, unique=True, blank=True)
     # Filled in automatically. They make comparing and searching fast.
-    strength_key = models.CharField(max_length=100, editable=False, db_index=True)
+    strength_key = models.CharField(max_length=300, editable=False, db_index=True)
     search_text = models.TextField(editable=False, blank=True)
+    sound_text = models.TextField(editable=False, blank=True)
 
     class Meta:
         ordering = ["brand_name", "strength_key"]
@@ -128,10 +132,16 @@ class Medicine(models.Model):
         # The leading space lets the search match the start of any word (see search.py).
         return " " + normalize(" ".join(p for p in parts if p))
 
+    def build_sound_text(self):
+        """How the brand and generic names sound, for catching other spellings (see text.sound_key)."""
+        words = f"{self.brand_name} {self.generic.name}".split()
+        return " " + " ".join(key for key in map(sound_key, words) if key) + " "
+
     def prepare(self):
         """Fill in the automatic fields. The bulk CSV import calls this directly."""
         self.strength_key = normalize_strength(self.strength)
         self.search_text = self.build_search_text()
+        self.sound_text = self.build_sound_text()
         if not self.slug:
             self.slug = unique_slug(Medicine, f"{self.brand_name} {self.strength} {self.dosage_form.name}", self.pk)
 
