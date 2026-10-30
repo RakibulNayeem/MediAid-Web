@@ -1,0 +1,9 @@
+{% load i18n mediaid %}<ol class="rank-list">
+  {% for row in rows %}
+  <li><a class="card" href="{% url 'medicines:search' %}?q={{ row.brand|urlencode }}">
+    <span class="rank-number">{{ forloop.counter|num }}</span>
+    <strong class="card-main">{% if LANGUAGE_CODE == "bn" and row.brand_bn and row.brand_bn != row.brand %}{{ row.brand_bn }} ({{ row.brand }}){% else %}{{ row.brand }}{% endif %}</strong>
+    <span class="muted small">{% blocktranslate with count=row.total|num %}{{ count }} searches{% endblocktranslate %}</span>
+  </a></li>
+  {% endfor %}
+</ol>

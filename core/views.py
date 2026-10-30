@@ -2,9 +2,11 @@ from django.db.models import F, Q
 from django.shortcuts import render
 
 from medicines.models import Medicine, saving_percent
+from medicines.rankings import most_searched
 
 SAVE_MONEY_COUNT = 6
 COMMON_COUNT = 8
+SIDEBAR_RANKS = 8
 
 
 def _save_money_cards():
@@ -44,6 +46,7 @@ def home(request):
     return render(request, "core/home.html", {
         "save_money": _save_money_cards(),
         "common": common,
+        "most_searched": most_searched(SIDEBAR_RANKS),
         "medicine_count": f"{count:,}" if (count := real_medicines.count()) else "",
         "maker_count": real_medicines.values("manufacturer").distinct().count(),
     })

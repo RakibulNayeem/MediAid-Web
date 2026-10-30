@@ -201,6 +201,18 @@ class LeaderboardTests(TestCase):
         Medicine.objects.filter(pk=self.ace.pk).update(search_count=3)
         self.assertEqual([(row["brand"], row["total"]) for row in self.board()], [("Napa", 4), ("Ace", 3)])
 
+    def test_home_page_shows_the_leaderboard_beside_the_medicines(self):
+        Medicine.objects.filter(pk=self.ace.pk).update(search_count=3)
+        response = self.client.get("/")
+        self.assertContains(response, 'class="section home-side"')
+        self.assertEqual([row["brand"] for row in response.context["most_searched"]], ["Ace"])
+        html = response.content.decode()
+        self.assertEqual(html.count('class="section home-side"'), 1)
+        self.assertLess(html.index("emergency-strip"), html.index("home-side"))
+
+    def test_home_page_hides_an_empty_leaderboard(self):
+        self.assertNotContains(self.client.get("/"), 'class="section home-side"')
+
     def test_empty_board_loads(self):
         self.assertEqual(self.board(), [])
         self.assertContains(self.client.get(reverse("medicines:leaderboard")), "এখনো যথেষ্ট")
