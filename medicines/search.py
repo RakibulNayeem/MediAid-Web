@@ -77,8 +77,11 @@ def _fuzzy(query):
     )
 
 
-def search_medicines(raw_query):
-    """Returns (queryset, was_fuzzy). was_fuzzy lets the page say 'closest matches'."""
+def search_medicines(raw_query, allow_closest=True):
+    """Returns (queryset, was_fuzzy). was_fuzzy lets the page say 'closest matches'.
+
+    allow_closest=False skips the slow closest-spelling step, for suggestions while typing.
+    """
     query = normalize(raw_query)[:MAX_QUERY_LENGTH]
     if not query:
         return Medicine.objects.none(), False
@@ -101,6 +104,8 @@ def search_medicines(raw_query):
             rank=Case(When(sound_text__startswith=f" {first_key}", then=Value(0)), default=Value(1), output_field=IntegerField())
         ).order_by("rank", "brand_name", "strength_key"), False
 
+    if not allow_closest:
+        return Medicine.objects.none(), False
     return _fuzzy(latin or query), True
 
 
