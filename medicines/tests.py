@@ -455,6 +455,9 @@ class DgdaPriceTests(TestCase):
         self.assertEqual(choose_price([("10 x 10 in Blister Pack", "4.01")], "Tablet"), (Decimal("4.01"), "1 tablet"))
         self.assertEqual(choose_price([("1 x 10 in Blister Pack", "3.45")], "Soft Gelatin Capsule"), (Decimal("3.45"), "1 capsule"))
 
+    def test_tablet_is_per_piece_even_if_the_pack_text_starts_with_an_amount(self):
+        self.assertEqual(choose_price([("120 mg x 10 in Blister Pack", "6")], "Tablet"), (Decimal("6"), "1 tablet"))
+
     def test_bottle_uses_its_smallest_size(self):
         rows = [("100 ml in Bottle", "65.45"), ("60 ml in Bottle", "49.73")]
         self.assertEqual(choose_price(rows, "Suspension"), (Decimal("49.73"), "60 ml"))

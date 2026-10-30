@@ -66,14 +66,15 @@ def choose_price(rows, form):
     if not options:
         return None
     form = form.lower()
-    amounts = [(Decimal(m.group(1)), m.group(2).lower(), price) for pack, price in options if (m := AMOUNT_PACK.match(pack))]
-    if amounts:
-        amount, unit, price = min(amounts, key=lambda item: item[0])
-        return price, f"{amount.normalize():f} {unit}"
+    # Tablets and capsules first: their price is always per piece, whatever the pack text says.
     if "tablet" in form:
         return options[0][1], "1 tablet"
     if "capsule" in form or "cozycap" in form:
         return options[0][1], "1 capsule"
+    amounts = [(Decimal(m.group(1)), m.group(2).lower(), price) for pack, price in options if (m := AMOUNT_PACK.match(pack))]
+    if amounts:
+        amount, unit, price = min(amounts, key=lambda item: item[0])
+        return price, f"{amount.normalize():f} {unit}"
     pack, price = options[0]
     return price, pack.lower()[:50]  # e.g. a vial with water: only the same pack can be compared
 
