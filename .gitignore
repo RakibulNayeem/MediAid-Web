@@ -16,3 +16,4 @@ staticfiles/
 skills-lock.json
 data/
 MediAid-Logo-Kit/
+client_secret*.json

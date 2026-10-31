@@ -60,3 +60,14 @@ def dual(obj, field="name"):
         if bangla and bangla != english:
             return f"{bangla} ({english})"
     return english
+
+
+@register.inclusion_tag("core/_avatar.html")
+def avatar(user, large=False):
+    """The Google photo when there is one, on top of the first letter of the name, which shows if it can't load."""
+    accounts = user.socialaccount_set.all()
+    return {
+        "large": large,
+        "letter": (user.first_name or user.email or user.username)[:1].upper(),
+        "picture": next((url for account in accounts if (url := account.get_avatar_url())), ""),
+    }

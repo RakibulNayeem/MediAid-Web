@@ -437,3 +437,39 @@ msgstr "অথবা"
 
 msgid "Continue with Google"
 msgstr "Google দিয়ে চালিয়ে যান"
+
+msgid "My profile"
+msgstr "আমার প্রোফাইল"
+
+msgid "First name"
+msgstr "নামের প্রথম অংশ"
+
+msgid "Last name"
+msgstr "নামের শেষ অংশ"
+
+msgid "Your name"
+msgstr "আপনার নাম"
+
+msgid "Your name has been saved."
+msgstr "আপনার নাম সংরক্ষণ করা হয়েছে।"
+
+msgid "Joined"
+msgstr "যোগ দিয়েছেন"
+
+msgid "Sign-in"
+msgstr "লগইনের উপায়"
+
+msgid "Email and password"
+msgstr "ইমেইল ও পাসওয়ার্ড"
+
+msgid "Save"
+msgstr "সংরক্ষণ করুন"
+
+msgid "Change password"
+msgstr "পাসওয়ার্ড বদলান"
+
+msgid "Set a password"
+msgstr "পাসওয়ার্ড সেট করুন"
+
+msgid "Admin panel"
+msgstr "অ্যাডমিন প্যানেল"

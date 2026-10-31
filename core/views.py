@@ -1,8 +1,13 @@
+from django.contrib import messages
+from django.contrib.auth.decorators import login_required
 from django.db.models import F, Q
-from django.shortcuts import render
+from django.shortcuts import redirect, render
+from django.utils.translation import gettext as _
 
 from medicines.models import Medicine, saving_percent
 from medicines.rankings import most_searched
+
+from .forms import ProfileForm
 
 SAVE_MONEY_COUNT = 6
 COMMON_COUNT = 8
@@ -49,4 +54,17 @@ def home(request):
         "most_searched": most_searched(SIDEBAR_RANKS),
         "medicine_count": f"{count:,}" if (count := real_medicines.count()) else "",
         "maker_count": real_medicines.values("manufacturer").distinct().count(),
+    })
+
+
+@login_required
+def profile(request):
+    form = ProfileForm(request.POST or None, instance=request.user)
+    if form.is_valid():
+        form.save()
+        messages.success(request, _("Your name has been saved."))
+        return redirect("core:profile")
+    return render(request, "core/profile.html", {
+        "form": form,
+        "has_google": request.user.socialaccount_set.filter(provider="google").exists(),
     })
