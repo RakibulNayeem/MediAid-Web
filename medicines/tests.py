@@ -2,6 +2,7 @@ from decimal import Decimal
 import csv
 from io import StringIO
 
+from allauth.socialaccount.models import SocialAccount
 from django.contrib.auth import get_user_model
 from django.core import mail
 from django.core.files.uploadedfile import SimpleUploadedFile
@@ -242,10 +243,49 @@ class AccountTests(TestCase):
         self.assertIn("client_id=test-id", response.url)
         self.assertIn("accounts%2Fgoogle%2Flogin%2Fcallback%2F", response.url)
 
-    def test_header_offers_login_then_logout(self):
+    def test_header_offers_login_then_the_profile(self):
         self.assertContains(self.client.get("/"), reverse("account_login"))
         self.client.force_login(get_user_model().objects.create_user("a", "a@example.com", "x"))
-        self.assertContains(self.client.get("/"), reverse("account_logout"))
+        home = self.client.get("/")
+        self.assertContains(home, reverse("core:profile"))
+        self.assertNotContains(home, reverse("account_login"))
+
+    def test_profile_needs_login(self):
+        response = self.client.get(reverse("core:profile"))
+        self.assertEqual(response.status_code, 302)
+        self.assertIn(reverse("account_login"), response.url)
+
+    def test_profile_shows_the_first_letter_when_there_is_no_photo(self):
+        self.client.force_login(get_user_model().objects.create_user("a", "rakib@example.com", "x"))
+        response = self.client.get(reverse("core:profile"))
+        self.assertContains(response, "rakib@example.com")
+        self.assertContains(response, '<span class="avatar avatar-large" aria-hidden="true">R</span>', html=True)
+        self.assertContains(response, reverse("account_logout"))
+        self.assertContains(response, reverse("account_change_password"))
+        self.assertNotContains(response, reverse("admin:index"))
+
+    def test_profile_shows_the_google_photo_and_offers_to_set_a_password(self):
+        user = get_user_model().objects.create_user("a", "a@example.com")
+        SocialAccount.objects.create(user=user, provider="google", uid="1", extra_data={"picture": "https://example.com/me.jpg"})
+        self.client.force_login(user)
+        with self.settings(SOCIALACCOUNT_PROVIDERS=self.GOOGLE):
+            response = self.client.get(reverse("core:profile"))
+        self.assertContains(response, 'src="https://example.com/me.jpg"')
+        self.assertContains(response, reverse("account_set_password"))
+
+    def test_profile_saves_the_name_only(self):
+        user = get_user_model().objects.create_user("a", "a@example.com", "x")
+        self.client.force_login(user)
+        response = self.client.post(reverse("core:profile"), {"first_name": "Rakib", "last_name": "Hasan", "email": "other@example.com", "is_staff": "on"})
+        self.assertRedirects(response, reverse("core:profile"))
+        user.refresh_from_db()
+        self.assertEqual(user.get_full_name(), "Rakib Hasan")
+        self.assertEqual(user.email, "a@example.com")
+        self.assertFalse(user.is_staff)
+
+    def test_staff_see_the_admin_link(self):
+        self.client.force_login(get_user_model().objects.create_user("a", "a@example.com", "x", is_staff=True))
+        self.assertContains(self.client.get(reverse("core:profile")), reverse("admin:index"))
 
     def test_signup_requires_a_verification_code(self):
         response = self.client.post(reverse("account_signup"), {

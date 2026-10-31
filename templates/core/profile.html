@@ -1,0 +1,40 @@
+{% extends "base.html" %}{% load i18n mediaid %}
+{% block title %}{% translate "My profile" %} | MediAid{% endblock %}
+{% block content %}
+<div class="auth-card profile-card">
+  {% if messages %}<ul class="auth-messages">{% for message in messages %}<li>{{ message }}</li>{% endfor %}</ul>{% endif %}
+  <div class="profile-head">
+    {% avatar user large=True %}
+    <div>
+      <h1>{{ user.get_full_name|default:user.email }}</h1>
+      {% if user.get_full_name %}<p class="muted">{{ user.email }}</p>{% endif %}
+    </div>
+  </div>
+
+  <dl class="profile-facts">
+    <div><dt>{% translate "Joined" %}</dt><dd>{{ user.date_joined|date:"j F Y"|num }}</dd></div>
+    <div><dt>{% translate "Sign-in" %}</dt><dd>{% if has_google %}Google{% if user.has_usable_password %} · {% endif %}{% endif %}{% if user.has_usable_password %}{% translate "Email and password" %}{% endif %}</dd></div>
+  </dl>
+
+  <form method="post">
+    {% csrf_token %}
+    <h2>{% translate "Your name" %}</h2>
+    {{ form.as_p }}
+    <button type="submit">{% translate "Save" %}</button>
+  </form>
+
+  <ul class="profile-links">
+    {% if user.has_usable_password %}
+    <li><a href="{% url 'account_change_password' %}">{% translate "Change password" %}</a></li>
+    {% else %}
+    <li><a href="{% url 'account_set_password' %}">{% translate "Set a password" %}</a></li>
+    {% endif %}
+    {% if user.is_staff %}<li><a href="{% url 'admin:index' %}">{% translate "Admin panel" %}</a></li>{% endif %}
+  </ul>
+
+  <form method="post" action="{% url 'account_logout' %}">
+    {% csrf_token %}
+    <button class="profile-logout" type="submit">{% translate "Log out" %}</button>
+  </form>
+</div>
+{% endblock %}
